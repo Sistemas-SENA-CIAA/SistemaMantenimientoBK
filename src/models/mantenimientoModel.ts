@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Insumo } from "./insumoModel";
 import { Proveedor } from "./proveedorModel";
+import { Usuario } from "./usuarioModel";
 
 @Entity('mantenimientos')
 export class Mantenimiento extends BaseEntity{
@@ -11,7 +12,7 @@ export class Mantenimiento extends BaseEntity{
     objetivo: string;
 
     @Column("varchar", { length: 50 })
-    responsable: string;
+    tipoMantenimiento: string;
 
     @Column('date', {name: 'fecha_prox_mantenimiento'})
     fechaProxMantenimiento: Date;
@@ -22,7 +23,11 @@ export class Mantenimiento extends BaseEntity{
     @OneToMany(() => Insumo, (insumo) => insumo.mantenimiento)
     insumos: Insumo[];
 
-    @ManyToOne(() => Proveedor, (proveedor) => proveedor.mantenimiento)
+    @ManyToOne(() => Proveedor, (proveedor) => proveedor.mantenimientos)
     @JoinColumn({name: 'nit_proveedor' })
     proveedor: Proveedor;
+
+    @ManyToOne(() => Usuario, (usuario) => usuario.mantenimientos)
+    @JoinColumn({name: 'usuario_documento' })
+    usuario: Usuario;
 }

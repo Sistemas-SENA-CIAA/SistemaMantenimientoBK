@@ -8,7 +8,7 @@ async function main(){
         await AppDataSource.initialize();
         console.log('Base de datos conectada');
         
-        app.listen(6505, () => {
+        app.listen(6506, () => {
             console.log("Server activo");
         });
     } catch (err) {

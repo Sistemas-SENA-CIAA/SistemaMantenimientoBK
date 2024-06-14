@@ -23,5 +23,5 @@ export class Proveedor extends BaseEntity{
     integranteEquipo: IntegranteEquipo[];
 
     @OneToMany(() => Mantenimiento, (mantenimiento) => mantenimiento.proveedor)
-    mantenimiento: Mantenimiento[];
+    mantenimientos: Mantenimiento[];
 }
