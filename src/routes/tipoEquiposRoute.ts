@@ -1,11 +1,11 @@
 import express from 'express';
-import tipoEquipoController from '../controllers/tipoEquipoController';
+import tipoEquiposController from '../controllers/tipoEquiposController';
 
 const router = express.Router();
 
-router.post('/', tipoEquipoController.agregarTipoEquipo);
+router.post('/', tipoEquiposController.agregarTipoEquipo);
 
 router.route("/:id")
-    .delete(tipoEquipoController.eliminarTipoEquipo);
+    .delete(tipoEquiposController.eliminarTipoEquipo);
     
 export default router;

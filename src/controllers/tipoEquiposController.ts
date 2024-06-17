@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export class TipoEquipoController{
+export class TipoEquiposController{
     constructor(){
     }
 
@@ -14,4 +14,4 @@ export class TipoEquipoController{
     }
 }
 
-export default new TipoEquipoController();
+export default new TipoEquiposController();

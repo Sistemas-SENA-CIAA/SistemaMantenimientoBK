@@ -4,7 +4,9 @@ import morgan from 'morgan';
 import { Request, Response } from "express";
 import bodyParser from 'body-parser';
 import equiposRoutes from './routes/equiposRoutes';
-import tipoEquiposRoutes from './routes/tipoEquiposRoute'
+import tipoEquiposRoutes from './routes/tipoEquiposRoute';
+import propietariosRoutes from './routes/propietariosRoutes'
+import authRoutes from './routes/authRoutes'
 
 const app = express();
 
@@ -24,5 +26,7 @@ app.get('/', (req: Request, res: Response) => {
 //Rutas de la APP
 app.use("/equipos", equiposRoutes);
 app.use("/tipoEquipos", tipoEquiposRoutes);
+app.use("/propietarios", propietariosRoutes);
+app.use('/auth', authRoutes);
 
 export default app;

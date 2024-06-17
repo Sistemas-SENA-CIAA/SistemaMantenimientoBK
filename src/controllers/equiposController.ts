@@ -14,20 +14,20 @@ class EquiposController{
     }
 
     //Obtener equipo específcio
-    async obtenerEquipoPorId(req: Request, res: Response){
-        const { id } = req.params;
-        res.send("Saludito desde 'obtenerEquipoPorId' " )
+    async obtenerEquipoPorSerial(req: Request, res: Response){
+        const { serial } = req.params;
+        res.send("Saludito desde 'obtenerEquipoPorSerial' " )
     }
 
     //Modificar equipo
     async modificarEquipo(req: Request, res: Response){
-        const { id } = req.params;
+        const { serial } = req.params;
         res.send("Saludito desde 'modificarEquipo' " )
     }
 
     //Eliminar equipo
     async eliminarEquipo(req: Request, res: Response){
-        const { id } = req.params;
+        const { serial } = req.params;
         res.send("Saludito desde 'eliminarEquipo' " )
     }
 }

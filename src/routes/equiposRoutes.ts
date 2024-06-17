@@ -3,11 +3,12 @@ import equiposController from '../controllers/equiposController';
 
 const router = express.Router();
 
- //Ruta para Obtener listado de equipos
+router.post('/', equiposController.agregarEquipo);
+
 router.get('/', equiposController.listarEquipos);
 
 router.route("/:id")
-    .get(equiposController.obtenerEquipoPorId)
+    .get(equiposController.obtenerEquipoPorSerial)
     .put(equiposController.modificarEquipo)
     .delete(equiposController.eliminarEquipo);
     
