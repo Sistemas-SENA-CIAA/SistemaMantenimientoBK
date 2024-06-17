@@ -20,3 +20,11 @@ export const AppDataSource = new DataSource({
     entities: [Equipo, TipoEquipo, Propietario, Proveedor, IntegranteEquipo, Mantenimiento, Insumo, Usuario, Rol],
     synchronize: false
 })
+
+AppDataSource.initialize()
+    .then(() => {
+        console.log('Data Source has been initialized!');
+    })
+    .catch((err) => {
+        console.error('Error during Data Source initialization:', err);
+    });

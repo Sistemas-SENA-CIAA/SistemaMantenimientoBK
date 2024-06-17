@@ -1,16 +1,18 @@
 import express from 'express';
 import equiposController from '../controllers/equiposController';
+import verificarToken from '../middlewares/authMiddleware';
+import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.post('/', equiposController.agregarEquipo);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.agregarEquipo);
 
-router.get('/', equiposController.listarEquipos);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.listarEquipos);
 
 router.route("/:id")
-    .get(equiposController.obtenerEquipoPorSerial)
-    .put(equiposController.modificarEquipo)
-    .delete(equiposController.eliminarEquipo);
+    .get(verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.obtenerEquipoPorSerial)
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo)
+    .delete(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.eliminarEquipo);
     
 
 

@@ -20,6 +20,8 @@ const verificarToken = (req: Request, res:Response, next: NextFunction) => {
     //Decodificamos el Token obtenido de la 'authorization'
     try {
         const decodedToken = jwt.verify(token, 'Token-Auth');
+        console.log(decodedToken);
+    
 
         (req as any).user = decodedToken; //Asigno el Payload al req.user y esto hace que la información del usuario esté disponible en el objeto de solicitud req para los siguientes middlewares y controladores (Mucho texto, pero esta parte debe quedar clara 😅)
         next();

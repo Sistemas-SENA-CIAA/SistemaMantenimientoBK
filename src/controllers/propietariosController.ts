@@ -1,16 +1,31 @@
 import { Request, Response } from "express";
+import { Propietario } from "../models/propietariosModel";
 
 class PropietariosController{
     constructor(){
     }
 
     async agregarPropietario(req: Request, res: Response){
-        res.send("Saluditos desde 'agregarPropietario' " )
+        try {
+            const registro = await Propietario.save(req.body);
+
+            res.status(201).json(registro);
+        } catch (err) {
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
     }
 
     //Listado de Propietarios
     async listarPropietarios(req: Request, res: Response){
-        res.send("Saludito desde 'listarPropietarios' " )
+        try {
+            const data = Propietario.find;
+
+            res.status(201).json(data);
+        } catch (err) {
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
     }
 
     //Obtener propietario específcio
