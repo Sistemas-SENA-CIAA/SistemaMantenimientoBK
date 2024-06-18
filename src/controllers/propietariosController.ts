@@ -19,9 +19,9 @@ class PropietariosController{
     //Listado de Propietarios
     async listarPropietarios(req: Request, res: Response){
         try {
-            const data = Propietario.find;
+            const data = await Propietario.find({relations: {equipos: true}});
 
-            res.status(201).json(data);
+            res.status(200).json(data);
         } catch (err) {
             if(err instanceof Error)
             res.status(500).send(err.message);
@@ -29,9 +29,18 @@ class PropietariosController{
     }
 
     //Obtener propietario específcio
-    async obtenerEquipoPorDocumento(req: Request, res: Response){
+    async obtenerPropietarioPorDocumento(req: Request, res: Response){
         const { documento } = req.params;
-        res.send("Saludito desde 'obtenerEquipoPorDocumento' " )
+        try {
+            const data = await Propietario.findOneBy({documento: Number(documento)});
+            if(!data){
+                throw new Error('Propietario no encontrado');
+            }
+            res.status(200).json(data);
+        } catch (err) {
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
     }
 
     //Modificar propietario

@@ -7,8 +7,8 @@ router.post('/', propietariosController.agregarPropietario);
 
 router.get('/', propietariosController.listarPropietarios);
 
-router.route("/:id")
-    .get(propietariosController.obtenerEquipoPorDocumento)
+router.route("/:documento")
+    .get(propietariosController.obtenerPropietarioPorDocumento)
     .put(propietariosController.modificarPropietario)
     .delete(propietariosController.eliminarPropietario);
     

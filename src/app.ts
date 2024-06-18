@@ -9,6 +9,8 @@ import propietariosRoutes from './routes/propietariosRoutes'
 import authRoutes from './routes/authRoutes'
 import rolesRoutes from './routes/rolesRoutes';
 import usuariosRoutes from './routes/usuariosRoutes';
+import mantenimientosRoutes from './routes/mantenimientosRoutes';
+import insumosRoutes from './routes/insumosRoutes';
 
 const app = express();
 
@@ -32,5 +34,7 @@ app.use("/propietarios", propietariosRoutes);
 app.use('/auth', authRoutes);
 app.use('/roles', rolesRoutes);
 app.use('/usuarios', usuariosRoutes);
+app.use('/mantenimientos', mantenimientosRoutes);
+app.use('/insumos', insumosRoutes);
 
 export default app;
