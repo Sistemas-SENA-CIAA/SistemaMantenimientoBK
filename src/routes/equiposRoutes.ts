@@ -9,7 +9,7 @@ router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposControlle
 
 router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.listarEquipos);
 
-router.route("/:id")
+router.route("/:serial")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.obtenerEquipoPorSerial)
     .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo)
     .delete(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.eliminarEquipo);

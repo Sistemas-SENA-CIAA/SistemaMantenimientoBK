@@ -37,7 +37,10 @@ export class Equipo extends BaseEntity{
     @Column('boolean', {name:'software_no_autorizado'})
     softwareNoAutorizado: string;
 
-    @OneToOne(() => TipoEquipo)
+    //@OneToOne(() => TipoEquipo)
+    //@JoinColumn({name: 'tipo_id' })
+    //tipoEquipo: TipoEquipo;
+    @ManyToOne(() => TipoEquipo, (tipoEquipo) => tipoEquipo.equipos)
     @JoinColumn({name: 'tipo_id' })
     tipoEquipo: TipoEquipo;
 
