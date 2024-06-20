@@ -8,18 +8,27 @@ class AuthController{
 
     }
 
-    //Registro de Usuario
-    async registrarUsuario(req: Request, res: Response){
-        try{
+    async registrarUsuario(req: Request, res: Response) {
+        try {
+            const { documento } = req.body;
+    
+            // Verificar si el usuario ya existe
+            const usuarioExistente = await Usuario.findOneBy({ documento });
+    
+            if (usuarioExistente) {
+                return res.status(400).json({ error: 'Este usuario ya está registrado' });
+            }
+    
             //Encriptación de contraseña
             req.body.contrasenia = bcrypt.hashSync(req.body.contrasenia, 10);
 
             const registro = await Usuario.save(req.body);
-
+    
             res.status(201).json(registro);
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+        } catch (err) {
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 

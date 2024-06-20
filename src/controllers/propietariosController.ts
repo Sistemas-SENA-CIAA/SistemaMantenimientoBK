@@ -7,6 +7,14 @@ class PropietariosController{
 
     async agregarPropietario(req: Request, res: Response){
         try {
+            const { documento } = req.body;
+
+            //Verificación existencia del propietario
+            const propietarioExistente = await Propietario.findOneBy({documento : documento});
+            if(propietarioExistente){
+                return res.status(400).json({ error: 'Este propietario ya está registrado' });
+            }
+
             const registro = await Propietario.save(req.body);
 
             res.status(201).json(registro);

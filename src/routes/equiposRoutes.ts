@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.agregarEquipo);
 
-router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.listarEquipos);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), equiposController.listarEquipos);
 
 router.route("/:serial")
-    .get(verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']), equiposController.obtenerEquipoPorSerial)
+    .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), equiposController.obtenerEquipoPorSerial)
     .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo)
     .delete(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.eliminarEquipo);
     

@@ -9,7 +9,13 @@ class EquiposController{
     //Agregar equipo
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { propietario } = req.body;
+            const { serial, propietario } = req.body;
+
+            //Verificamos que no exista un equipo con el mismo serial
+            const equipoExistente = await Equipo.findOneBy({serial: serial});
+            if(equipoExistente){
+                return res.status(400).json({ error: 'Este Equipo ya está registrado' });
+            }
 
             //Verificamos que el propietario si exista en la BD
             const propietarioRegistro = await Propietario.findOneBy({documento: propietario});
@@ -88,12 +94,12 @@ class EquiposController{
     async eliminarEquipo(req: Request, res: Response){
         const { serial } = req.params;
         try {
-            const data = Equipo.findOneBy({serial: serial});
+            const data = await Equipo.findOneBy({serial: serial});
             if(!data){
                 throw new Error ('Equipo no encontrado');
             }
             await Equipo.delete({serial: serial});
-            res.status(204);
+            res.status(204).json({message: 'Equipo Eliminado Correctamente'});
         } catch (err) {
             if(err instanceof Error)
             res.status(500).send(err.message);
