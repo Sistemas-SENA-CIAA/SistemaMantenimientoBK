@@ -51,16 +51,22 @@ class PropietariosController{
         }
     }
 
-    //Modificar propietario
-    async modificarPropietario(req: Request, res: Response){
+    async modificarDatosPropietario(req: Request, res: Response){
         const { documento } = req.params;
-        res.send("Saludito desde 'modificarPropietario' " )
-    }
+        try{
+            const data = await Propietario.findOneBy({documento: Number(documento)});
+            if(!data){
+                throw new Error('Propietario no encontrado')
+            }
 
-    //Eliminar equipo
-    async eliminarPropietario(req: Request, res: Response){
-        const { documento } = req.params;
-        res.send("Saludito desde 'eliminarPropietario' " )
+            await Propietario.update({documento: Number(documento)}, req.body);
+            const registroActualizado = await Propietario.findOne({where: {documento: Number(documento)}});
+
+            res.status(200).json(registroActualizado);
+        }catch(err){
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
     }
 }
 

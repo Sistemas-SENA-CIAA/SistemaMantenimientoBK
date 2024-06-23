@@ -89,22 +89,6 @@ class EquiposController{
             res.status(500).send(err.message);
         }
     }
-
-    //Eliminar equipo
-    async eliminarEquipo(req: Request, res: Response){
-        const { serial } = req.params;
-        try {
-            const data = await Equipo.findOneBy({serial: serial});
-            if(!data){
-                throw new Error ('Equipo no encontrado');
-            }
-            await Equipo.delete({serial: serial});
-            res.status(204).json({message: 'Equipo Eliminado Correctamente'});
-        } catch (err) {
-            if(err instanceof Error)
-            res.status(500).send(err.message);
-        }
-    }
 }
 
 export default new EquiposController();

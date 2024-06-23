@@ -11,8 +11,7 @@ router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), eq
 
 router.route("/:serial")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), equiposController.obtenerEquipoPorSerial)
-    .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo)
-    .delete(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.eliminarEquipo);
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo);
     
 
 

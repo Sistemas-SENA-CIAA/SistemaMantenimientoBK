@@ -9,4 +9,7 @@ router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), ma
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.agregarMantenimiento);
 
+router.route("/:idMantenimiento")
+    .put(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), mantenimientosController.modificarMantenimiento)
+
 export default router

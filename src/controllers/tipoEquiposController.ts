@@ -15,11 +15,6 @@ export class TipoEquiposController{
             res.status(500).send(err.message);
         }
     }
-
-    async eliminarTipoEquipo(req: Request, res: Response){
-        const { id } = req.params;
-        res.send("Saludito desde 'eliminarEquipo' " )
-    }
 }
 
 export default new TipoEquiposController();

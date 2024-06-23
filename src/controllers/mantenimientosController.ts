@@ -33,6 +33,24 @@ class MantenimientosController{
             res.status(500).send(err.message);
         }
     }
+
+    async modificarMantenimiento(req: Request, res: Response){
+        const { idMantenimiento } = req.params;
+        try{
+            const data = await Mantenimiento.findOneBy({idMantenimiento: Number(idMantenimiento)});
+            if(!data){
+                throw new Error('Mantenimiento no encontrado')
+            }
+
+            await Mantenimiento.update({idMantenimiento: Number(idMantenimiento)}, req.body);
+            const registroActualizado = await Mantenimiento.findOne({where: {idMantenimiento: Number(idMantenimiento)}, relations: {usuario: true}});
+
+            res.status(200).json(registroActualizado);
+        }catch(err){
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
+    }
 }
 
 export default new MantenimientosController();

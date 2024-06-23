@@ -1,16 +1,17 @@
 import express from 'express';
 import propietariosController from '../controllers/propietariosController';
+import verificarToken from '../middlewares/authMiddleware';
+import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.post('/', propietariosController.agregarPropietario);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.agregarPropietario);
 
-router.get('/', propietariosController.listarPropietarios);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.listarPropietarios);
 
 router.route("/:documento")
-    .get(propietariosController.obtenerPropietarioPorDocumento)
-    .put(propietariosController.modificarPropietario)
-    .delete(propietariosController.eliminarPropietario);
+    .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.obtenerPropietarioPorDocumento)
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), propietariosController.modificarDatosPropietario)
     
 
 
