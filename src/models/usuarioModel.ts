@@ -1,6 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { Rol } from "./rolModel";
 import { Mantenimiento } from "./mantenimientoModel";
+import { Estado } from "./estadoModel";
 
 @Entity('usuarios')
 export class Usuario extends BaseEntity{
@@ -41,4 +42,8 @@ export class Usuario extends BaseEntity{
 
     @OneToMany(() => Mantenimiento, (mantenimiento) => mantenimiento.usuario)
     mantenimientos: Mantenimiento[];
+
+    @ManyToOne(() => Estado, (estado) => estado.usuario)
+    @JoinColumn({name: 'estado_id' })
+    estado: Estado;
 }

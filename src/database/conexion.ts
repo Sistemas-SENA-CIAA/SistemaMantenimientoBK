@@ -2,12 +2,13 @@ import { DataSource } from "typeorm";
 import { Equipo } from "../models/equipoModel";
 import { TipoEquipo } from "../models/tipoEquipoModel";
 import { Propietario } from "../models/propietariosModel";
-import { Proveedor } from "../models/proveedorModel";
 import { IntegranteEquipo } from "../models/integranteEquipoModel";
 import { Mantenimiento } from "../models/mantenimientoModel";
 import { Insumo } from "../models/insumoModel";
 import { Usuario } from "../models/usuarioModel";
 import { Rol } from "../models/rolModel";
+import { Estado } from "../models/estadoModel";
+import { Chequeo } from "../models/chequeoModel";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
     password: "",
     database: "mantenimiento",
     logging: true,
-    entities: [Equipo, TipoEquipo, Propietario, Proveedor, IntegranteEquipo, Mantenimiento, Insumo, Usuario, Rol],
+    entities: [Equipo, TipoEquipo, Propietario, IntegranteEquipo, Mantenimiento, Insumo, Usuario, Rol, Estado, Chequeo],
     synchronize: false
 })
 

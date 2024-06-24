@@ -1,6 +1,8 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 import { TipoEquipo } from "./tipoEquipoModel";
 import { Propietario } from "./propietariosModel";
+import { Estado } from "./estadoModel";
+import { Chequeo } from "./chequeoModel";
 
 @Entity('equipos')
 export class Equipo extends BaseEntity{
@@ -12,15 +14,6 @@ export class Equipo extends BaseEntity{
 
     @Column("varchar", { length: 100 })
     referencia: string;
-
-    @Column("varchar", { length: 100, name: 'host_name' })
-    hostName: string;
-
-    @Column("varchar", { length: 30, name: 'sistema_operativo' })
-    sistemaOperativo: string;
-
-    @Column("varchar", { length: 100, name: 'software_instalado' })
-    softwareInstalado: string;
 
     @Column('date', { name: 'fecha_compra' })
     fechaCompra: Date;
@@ -34,12 +27,6 @@ export class Equipo extends BaseEntity{
     @Column("varchar", { length: 30, name:'placa_sena' })
     placaSena: string;
 
-    @Column('boolean', {name:'software_no_autorizado'})
-    softwareNoAutorizado: string;
-
-    //@OneToOne(() => TipoEquipo)
-    //@JoinColumn({name: 'tipo_id' })
-    //tipoEquipo: TipoEquipo;
     @ManyToOne(() => TipoEquipo, (tipoEquipo) => tipoEquipo.equipos)
     @JoinColumn({name: 'tipo_id' })
     tipoEquipo: TipoEquipo;
@@ -47,4 +34,11 @@ export class Equipo extends BaseEntity{
     @ManyToOne(() => Propietario, (propietario) => propietario.equipos)
     @JoinColumn({name: 'propietario_documento' })
     propietario: Propietario;
+
+    @ManyToOne(() => Estado, (estado) => estado.equipo)
+    @JoinColumn({name: 'estado_id' })
+    estado: Estado;
+
+    @OneToMany(() => Chequeo, (chequeo) => chequeo.equipo)
+    chequeos: Chequeo[];
 }

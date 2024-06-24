@@ -9,9 +9,6 @@ export class TipoEquipo extends BaseEntity{
     @Column("varchar", { length: 30 })
     nombre: string;
 
-    //@OneToOne(() => Equipo, (equipo) => equipo.tipoEquipo)
-    //equipo: Equipo;
-
     @OneToMany(() => Equipo, (equipo) => equipo.tipoEquipo)
     equipos: Equipo[];
 }

@@ -1,5 +1,4 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { Proveedor } from "./proveedorModel";
 
 @Entity('integrantes_equipo')
 export class IntegranteEquipo extends BaseEntity{
@@ -14,8 +13,4 @@ export class IntegranteEquipo extends BaseEntity{
 
     @Column("varchar", { length: 80 })
     correo: string;
-
-    @ManyToOne(() => Proveedor, (proveedor) => proveedor.integranteEquipo)
-    @JoinColumn({name: 'nit_proveedor' })
-    proveedor: Proveedor;
 }
