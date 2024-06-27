@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { TipoEquipo } from "./tipoEquipoModel";
 import { Propietario } from "./propietariosModel";
 import { Estado } from "./estadoModel";
@@ -18,14 +18,17 @@ export class Equipo extends BaseEntity{
     @Column('date', { name: 'fecha_compra' })
     fechaCompra: Date;
 
-    @Column('datetime', { name: 'marca_temporal' })
-    marcaTemporal: Date;
-
     @Column("varchar", { length: 30, name: 'codigo_area'})
     codigoArea: string;
 
     @Column("varchar", { length: 30, name:'placa_sena' })
     placaSena: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 
     @ManyToOne(() => TipoEquipo, (tipoEquipo) => tipoEquipo.equipos)
     @JoinColumn({name: 'tipo_id' })

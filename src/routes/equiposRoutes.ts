@@ -9,6 +9,8 @@ router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposControlle
 
 router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), equiposController.listarEquipos);
 
+router.put('/:serial/estado', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.actualizarEstadoEquipo);
+
 router.route("/:serial")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), equiposController.obtenerEquipoPorSerial)
     .put(verificarToken, validarRol(['ADMINISTRADOR']), equiposController.modificarEquipo);

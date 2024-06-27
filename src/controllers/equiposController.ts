@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { Equipo } from "../models/equipoModel";
 import { Propietario } from "../models/propietariosModel";
+import { AppDataSource } from "../database/conexion";
+import { Estado } from "../models/estadoModel";
 
 class EquiposController{
     constructor(){
@@ -35,7 +37,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {propietario: true, tipoEquipo: true}});
+            const data = await Equipo.find({relations: {propietario: true, tipoEquipo: true, estado: true}});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
@@ -84,6 +86,38 @@ class EquiposController{
             const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {propietario: true, tipoEquipo: true}});
 
             res.status(200).json(registroActualizado);
+        } catch (err) {
+            if(err instanceof Error)
+            res.status(500).send(err.message);
+        }
+    }
+
+    //Modificar estado del Equipo
+    async actualizarEstadoEquipo(req: Request, res: Response) {
+        const { serial } = req.params;
+    
+        try {
+            const equipo = await Equipo.findOne({ where: { serial : serial }, relations: ["estado"] });
+        
+            if (equipo) {
+                //Se cambia el estado
+                const nuevoEstadoValor = !equipo.estado.estado;
+                let nuevoEstado = await Estado.findOne({ where: { estado: nuevoEstadoValor } });
+        
+                //Se crea un nuevo estado en caso de que no exista
+                if (!nuevoEstado) {
+                    nuevoEstado = Estado.create({ estado: nuevoEstadoValor });
+                    await Estado.save(nuevoEstado);
+                }
+        
+                //Actualizo equipo con el nuevo estado 
+                equipo.estado = nuevoEstado;
+                const equipoActualizado = await Equipo.save(equipo);
+        
+                return res.status(200).json(equipoActualizado);
+            } else {
+                return res.status(404).json({ error: 'Equipo no encontrado' });
+            }
         } catch (err) {
             if(err instanceof Error)
             res.status(500).send(err.message);

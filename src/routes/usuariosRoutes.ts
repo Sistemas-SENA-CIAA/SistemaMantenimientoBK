@@ -8,7 +8,9 @@ const router = express.Router();
 //Ruta GET para los usuarios
 router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), usuariosController.listarUsuarios);
 
-router.route("/:serial")
+router.put('/:documento/estado', verificarToken, validarRol(['ADMINISTRADOR']), usuariosController.actualizarEstadoUsuario);
+
+router.route("/:documento")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), usuariosController.obtenerUsuarioPorDocumento)
     .put(verificarToken, validarRol(['ADMINISTRADOR']), usuariosController.modificarDatosUsuario);
 
