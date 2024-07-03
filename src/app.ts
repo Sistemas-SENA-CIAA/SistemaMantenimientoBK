@@ -11,6 +11,7 @@ import rolesRoutes from './routes/rolesRoutes';
 import usuariosRoutes from './routes/usuariosRoutes';
 import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import insumosRoutes from './routes/insumosRoutes';
+import estadosRoutes from './routes/estadosRoutes'
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use('/roles', rolesRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/mantenimientos', mantenimientosRoutes);
 app.use('/insumos', insumosRoutes);
+app.use('/estados', estadosRoutes)
 
 export default app;

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.agregarPropietario);
 
-router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.listarPropietarios);
+router.get('/', propietariosController.listarPropietarios);
 
 router.route("/:documento")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), propietariosController.obtenerPropietarioPorDocumento)
