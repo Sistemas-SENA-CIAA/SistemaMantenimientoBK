@@ -6,7 +6,7 @@ import validarRol from '../middlewares/rolValidatorMiddleware';
 const router = express.Router();
 
 //Ruta GET para los usuarios
-router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), usuariosController.listarUsuarios);
+router.get('/', usuariosController.listarUsuarios);
 
 router.put('/:documento/estado', verificarToken, validarRol(['ADMINISTRADOR']), usuariosController.actualizarEstadoUsuario);
 

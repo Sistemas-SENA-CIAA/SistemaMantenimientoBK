@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { Rol } from "../models/rolModel";
 import { Usuario } from "../models/usuarioModel";
+import { AppDataSource } from "../database/conexion";
+import { getRepository } from "typeorm";
 
 class RolesController{
     constructor(){
@@ -29,34 +31,37 @@ class RolesController{
         }
     }
 
-    async asociarUsuario(req: Request, res: Response) {
+    async asociarUsuario(req: Request, res: Response){
         try {
             const { usuario_documento, rol_id } = req.body;
     
-            const usuario = await Usuario.findOneBy({ documento: usuario_documento });
-            console.log(usuario);
-            
-
-            const rol = await Rol.findOneBy({ id: Number(rol_id) });
-    
+            const usuario = await Usuario.findOne({ where: { documento: usuario_documento } });
             if (!usuario) {
-                throw new Error('Usuario no encontrado');
+                return res.status(404).json({ message: 'Usuario no encontrado' });
             }
+    
+            const rol = await Rol.findOne({ where: { id: rol_id } });
             if (!rol) {
-                throw new Error('Rol no encontrado');
+                return res.status(404).json({ message: 'Rol no encontrado' });
             }
     
-            rol.usuarios = rol.usuarios || [];
-            rol.usuarios.push(usuario);
+            //Creamos consulta usando un 'QueryBuilder'
+            await AppDataSource.createQueryBuilder()
+                .insert()
+                .into('roles_usuarios')
+                .values({
+                    usuario_documento: usuario.documento,
+                    rol_id: rol.id
+                })
+                .execute();
     
-            const registro = await Rol.save(rol);
-    
-            res.status(200).json(registro);
+            res.status(200).json({ message: 'Rol asignado al usuario correctamente' });
         } catch (err) {
-            if (err instanceof Error)
+            if (err instanceof Error) {
                 res.status(500).send(err.message);
+            }
         }
-    }
+    };
 }
 
 export default new RolesController;
