@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Equipo } from "../models/equipoModel";
-import { Propietario } from "../models/propietariosModel";
+import { CuentaDante } from "../models/cuentaDanteModel";
 import { AppDataSource } from "../database/conexion";
 import { Estado } from "../models/estadoModel";
 
@@ -11,7 +11,7 @@ class EquiposController{
     //Agregar equipo
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { serial, propietario } = req.body;
+            const { serial, cuentaDante } = req.body;
 
             //Verificamos que no exista un equipo con el mismo serial
             const equipoExistente = await Equipo.findOneBy({serial: serial});
@@ -20,8 +20,8 @@ class EquiposController{
             }
 
             //Verificamos que el propietario si exista en la BD
-            const propietarioRegistro = await Propietario.findOneBy({documento: propietario});
-            if(!propietarioRegistro){
+            const  cuentaDanteRegistro = await CuentaDante.findOneBy({documento: cuentaDante});
+            if(!cuentaDanteRegistro){
                 throw new Error ('Propietario no encontrado')
             }
 
@@ -37,7 +37,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {propietario: true, tipoEquipo: true, estado: true}});
+            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true}});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
@@ -51,7 +51,7 @@ class EquiposController{
         try {
             const registro = await Equipo.findOne({where: {
                 serial: serial}, 
-                relations: {propietario: true, tipoEquipo: true}
+                relations: {cuentaDante: true, tipoEquipo: true}
             });
     
             if(!registro){
@@ -68,10 +68,10 @@ class EquiposController{
     async modificarEquipo(req: Request, res: Response){
         const { serial } = req.params;
         try {
-            const{ propietario } = req.body;
+            const{ cuentaDante } = req.body;
 
             //Obtengo los registros de las entidades relacionadas
-            const propietarioRegistro = await Propietario.findOneBy({documento: propietario});
+            const propietarioRegistro = await CuentaDante.findOneBy({documento: cuentaDante});
             if(!propietarioRegistro){
                 throw new Error('Propietario no encontrado')
             }
@@ -83,7 +83,7 @@ class EquiposController{
 
             //Actualizo el registro y le asigno el 'req.body'
             await Equipo.update({serial: serial}, req.body);
-            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {propietario: true, tipoEquipo: true}});
+            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {cuentaDante: true, tipoEquipo: true}});
 
             res.status(200).json(registroActualizado);
         } catch (err) {

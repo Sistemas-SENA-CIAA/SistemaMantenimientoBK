@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { Rol } from "../models/rolModel";
 import { Usuario } from "../models/usuarioModel";
 import { AppDataSource } from "../database/conexion";
-import { getRepository } from "typeorm";
 
 class RolesController{
     constructor(){

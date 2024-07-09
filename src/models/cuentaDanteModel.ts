@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Equipo } from "./equipoModel";
 
-@Entity('propietarios')
-export class Propietario extends BaseEntity{
+@Entity('cuentadantes')
+export class CuentaDante extends BaseEntity{
     @PrimaryColumn()
     documento: number;
 
@@ -15,6 +15,9 @@ export class Propietario extends BaseEntity{
     @Column("varchar", { length: 30 })
     departamento: string;
 
-    @OneToMany(() => Equipo, (equipo) => equipo.propietario)
+    @Column("varchar", { length: 30, name: "tipo_contrato" })
+    tipoContrato: string;
+
+    @OneToMany(() => Equipo, (equipo) => equipo.cuentaDante)
     equipos: Equipo[];
 }

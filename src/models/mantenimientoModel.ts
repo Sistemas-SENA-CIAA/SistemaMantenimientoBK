@@ -1,6 +1,7 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Insumo } from "./insumoModel";
 import { Usuario } from "./usuarioModel";
+import { Equipo } from "./equipoModel";
 
 @Entity('mantenimientos')
 export class Mantenimiento extends BaseEntity{
@@ -25,4 +26,7 @@ export class Mantenimiento extends BaseEntity{
     @ManyToOne(() => Usuario, (usuario) => usuario.mantenimientos)
     @JoinColumn({name: 'usuario_documento' })
     usuario: Usuario;
+
+    @ManyToMany(() => Equipo, equipo => equipo.mantenimientos)
+    equipos: Equipo[];
 }
