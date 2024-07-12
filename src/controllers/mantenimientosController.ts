@@ -109,6 +109,26 @@ class MantenimientosController{
             await queryRunner.release();
         }
     }
+
+    async listarEquiposAsociadosMantenimiento(req: Request, res: Response){
+        const { idMantenimiento } = req.params;
+
+        try {
+          const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
+            where: { idMantenimiento: parseInt(idMantenimiento) },
+            relations: ['equipos'],
+          });
+      
+          if (!mantenimiento) {
+            return res.status(404).json({ message: 'Mantenimiento no encontrado' });
+          }
+      
+          res.json(mantenimiento.equipos); // Devuelve los equipos asociados
+        } catch (error) {
+          console.error('Error al obtener los equipos:', error);
+          res.status(500).json({ message: 'Error al obtener los equipos' });
+        }      
+    }
 }
 
 export default new MantenimientosController();
