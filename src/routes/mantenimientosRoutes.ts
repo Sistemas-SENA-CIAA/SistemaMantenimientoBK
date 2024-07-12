@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), mantenimientosController.listarMantenimientos);
 
+router.get('/:idMantenimiento/equipos', verificarToken, mantenimientosController.listarEquiposAsociadosMantenimiento)
+
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.agregarMantenimiento);
 
 router.post('/asociaEquipos', verificarToken, mantenimientosController.asociarEquipos)
