@@ -37,7 +37,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true}});
+            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, area: true}});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
@@ -51,7 +51,7 @@ class EquiposController{
         try {
             const registro = await Equipo.findOne({where: {
                 serial: serial}, 
-                relations: {cuentaDante: true, tipoEquipo: true}
+                relations: {cuentaDante: true, tipoEquipo: true, area: true}
             });
     
             if(!registro){
