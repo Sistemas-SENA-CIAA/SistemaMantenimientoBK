@@ -12,7 +12,8 @@ import usuariosRoutes from './routes/usuariosRoutes';
 import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import insumosRoutes from './routes/insumosRoutes';
 import estadosRoutes from './routes/estadosRoutes';
-import areasRoutes from './routes/areasRoutes'
+import areasRoutes from './routes/areasRoutes';
+import chequeosRoutes from './routes/chequeosRoutes'
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/mantenimientos', mantenimientosRoutes);
 app.use('/insumos', insumosRoutes);
 app.use('/estados', estadosRoutes);
-app.use('/areas', areasRoutes)
+app.use('/areas', areasRoutes);
+app.use('/chequeos', chequeosRoutes)
 
 export default app;
