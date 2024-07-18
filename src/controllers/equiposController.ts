@@ -65,10 +65,16 @@ class EquiposController{
     }
 
     //Modificar equipo
-    async modificarEquipo(req: Request, res: Response){
+    async modificarEquipo(req: Request, res: Response) {
         const { serial } = req.params;
+        const { cuentaDante, ...otherFields } = req.body;
+
         try {
-            const{ cuentaDante } = req.body;
+            // Verifica si el propietario existe
+            // const propietarioRegistro = await CuentaDante.findOneBy({ documento: cuentaDante });
+            // if (!propietarioRegistro) {
+            //     throw new Error('Propietario no encontrado');
+            // }
 
             const data = await Equipo.findOneBy({serial: serial});
             if(!data){
@@ -81,8 +87,9 @@ class EquiposController{
 
             res.status(200).json(registroActualizado);
         } catch (err) {
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 
