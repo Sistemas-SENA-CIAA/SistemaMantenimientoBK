@@ -42,7 +42,7 @@ class ChequeosController{
                 chequeo.descripcion = descripcion;
                 chequeo.observaciones = observaciones;
                 chequeo.equipo = equipo; 
-                await chequeo.save();
+                await chequeo.;
                 //Si el equipo no existe, se crea uno nuevo y se le asigna la info
             } else {
                 chequeo = Chequeo.create({

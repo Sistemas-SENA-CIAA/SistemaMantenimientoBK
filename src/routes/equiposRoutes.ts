@@ -5,7 +5,7 @@ import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.post('/', equiposController.agregarEquipo);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.agregarEquipo);
 
 router.get('/', equiposController.listarEquipos);
 

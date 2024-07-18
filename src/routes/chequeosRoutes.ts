@@ -5,7 +5,7 @@ import chequeosController from '../controllers/chequeosController';
 
 const router = express.Router();
 
-router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), chequeosController.agregarChequeo);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), chequeosController.agregarChequeo);
 
 router.put('/', verificarToken, chequeosController.actualizarChequeo);
 
