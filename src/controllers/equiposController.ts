@@ -65,30 +65,32 @@ class EquiposController{
     }
 
     //Modificar equipo
-    async modificarEquipo(req: Request, res: Response){
+    async modificarEquipo(req: Request, res: Response) {
         const { serial } = req.params;
+        const { cuentaDante, ...otherFields } = req.body;
+
         try {
-            const{ cuentaDante } = req.body;
+            // Verifica si el propietario existe
+            // const propietarioRegistro = await CuentaDante.findOneBy({ documento: cuentaDante });
+            // if (!propietarioRegistro) {
+            //     throw new Error('Propietario no encontrado');
+            // }
 
-            //Obtengo los registros de las entidades relacionadas
-            const propietarioRegistro = await CuentaDante.findOneBy({documento: cuentaDante});
-            if(!propietarioRegistro){
-                throw new Error('Propietario no encontrado')
+            // Verifica si el equipo existe
+            const equipoExistente = await Equipo.findOneBy({ serial: serial });
+            if (!equipoExistente) {
+                throw new Error('Equipo no encontrado');
             }
 
-            const data = await Equipo.findOneBy({serial: serial});
-            if(!data){
-                throw new Error('Equipo no encontrado')
-            }
-
-            //Actualizo el registro y le asigno el 'req.body'
-            await Equipo.update({serial: serial}, req.body);
-            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {cuentaDante: true, tipoEquipo: true}});
+            // Actualiza el equipo con los nuevos datos
+            await Equipo.update({ serial: serial }, { ...otherFields });
+            const registroActualizado = await Equipo.findOne({ where: { serial: serial }, relations: { cuentaDante: true, tipoEquipo: true, area: true } });
 
             res.status(200).json(registroActualizado);
         } catch (err) {
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 
