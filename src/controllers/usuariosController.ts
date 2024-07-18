@@ -81,6 +81,24 @@ class UsuariosController {
             }
         }
     }    
+
+    async obtenerRolUsuario(req: Request, res: Response){
+        try {
+            const { documento } = req.params;
+            const usuario = await Usuario.findOne({ where: {documento : Number(documento)}, relations: ['roles'] });
+    
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+    
+            // Suponiendo que el usuario puede tener múltiples roles, se selecciona el primer rol
+            const rol = usuario.roles.length > 0 ? usuario.roles[0].nombre : null;
+    
+            res.json({ rol });
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener el rol del usuario', error });
+        }    
+    }
 }
 
 export default new UsuariosController();

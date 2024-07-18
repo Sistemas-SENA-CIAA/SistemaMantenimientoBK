@@ -29,7 +29,7 @@ class MantenimientosController{
 
     async listarMantenimientos(req: Request, res: Response){
         try{
-            const data = await Mantenimiento.find({relations: {usuario: true, insumos: true}});
+            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],});
             res.status(200).json(data);
         }catch(err){
             if(err instanceof Error)
@@ -116,7 +116,7 @@ class MantenimientosController{
         try {
           const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
             where: { idMantenimiento: parseInt(idMantenimiento) },
-            relations: ['equipos'],
+            relations: ['equipos', 'usuarios', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],
           });
       
           if (!mantenimiento) {

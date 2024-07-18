@@ -37,7 +37,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, area: true}});
+            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, area: true, chequeos: true, mantenimientos: true}});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
@@ -76,15 +76,14 @@ class EquiposController{
             //     throw new Error('Propietario no encontrado');
             // }
 
-            // Verifica si el equipo existe
-            const equipoExistente = await Equipo.findOneBy({ serial: serial });
-            if (!equipoExistente) {
-                throw new Error('Equipo no encontrado');
+            const data = await Equipo.findOneBy({serial: serial});
+            if(!data){
+                throw new Error('Equipo no encontrado')
             }
 
-            // Actualiza el equipo con los nuevos datos
-            await Equipo.update({ serial: serial }, { ...otherFields });
-            const registroActualizado = await Equipo.findOne({ where: { serial: serial }, relations: { cuentaDante: true, tipoEquipo: true, area: true } });
+            //Actualizo el registro y le asigno el 'req.body'
+            await Equipo.update({serial: serial}, req.body);
+            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {cuentaDante: true, tipoEquipo: true}});
 
             res.status(200).json(registroActualizado);
         } catch (err) {

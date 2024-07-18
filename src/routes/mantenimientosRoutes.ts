@@ -5,9 +5,9 @@ import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), mantenimientosController.listarMantenimientos);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.listarMantenimientos);
 
-router.get('/:idMantenimiento/equipos', verificarToken, mantenimientosController.listarEquiposAsociadosMantenimiento)
+router.get('/:idMantenimiento/equipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.listarEquiposAsociadosMantenimiento)
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.agregarMantenimiento);
 

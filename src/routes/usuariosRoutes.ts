@@ -11,7 +11,7 @@ router.get('/', usuariosController.listarUsuarios);
 router.put('/:documento/estado', verificarToken, validarRol(['ADMINISTRADOR']), usuariosController.actualizarEstadoUsuario);
 
 router.route("/:documento")
-    .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), usuariosController.obtenerUsuarioPorDocumento)
+    .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), usuariosController.obtenerRolUsuario)
     .put(verificarToken, validarRol(['ADMINISTRADOR']), usuariosController.modificarDatosUsuario);
 
 export default router;
