@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), chequeosController.agregarChequeo);
 
+router.put('/', verificarToken, chequeosController.actualizarChequeo);
+
 export default router;

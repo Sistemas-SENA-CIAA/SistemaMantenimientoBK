@@ -70,12 +70,6 @@ class EquiposController{
         try {
             const{ cuentaDante } = req.body;
 
-            //Obtengo los registros de las entidades relacionadas
-            const propietarioRegistro = await CuentaDante.findOneBy({documento: cuentaDante});
-            if(!propietarioRegistro){
-                throw new Error('Propietario no encontrado')
-            }
-
             const data = await Equipo.findOneBy({serial: serial});
             if(!data){
                 throw new Error('Equipo no encontrado')
