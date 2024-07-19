@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { Equipo } from "./equipoModel";
+import { Estado } from "./estadoModel";
 
 @Entity('cuentadantes')
 export class CuentaDante extends BaseEntity{
@@ -20,4 +21,8 @@ export class CuentaDante extends BaseEntity{
 
     @OneToMany(() => Equipo, (equipo) => equipo.cuentaDante)
     equipos: Equipo[];
+
+    @ManyToOne(() => Estado, (estado) => estado.cuentaDante)
+    @JoinColumn({name: 'estado_id' })
+    estado: Estado;
 }
