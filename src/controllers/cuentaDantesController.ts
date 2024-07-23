@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CuentaDante } from "../models/cuentaDanteModel";
+import { DeepPartial } from "typeorm";
 
 class PropietariosController{
     constructor(){
@@ -51,21 +52,37 @@ class PropietariosController{
         }
     }
 
-    async modificarDatosCuentaDante(req: Request, res: Response){
+    async modificarDatosCuentadante(req: Request, res: Response) {
         const { documento } = req.params;
-        try{
-            const data = await CuentaDante.findOneBy({documento: Number(documento)});
-            if(!data){
-                throw new Error('CuentaDante no encontrado')
+        const {estados, ...otherFields } = req.body;
+
+        try {
+            const cuentadante = await CuentaDante.findOne({ where: { documento: Number(documento) }, relations: ['estado'] });
+
+            if (!cuentadante) {
+            throw new Error('Equipo no encontrado');
             }
 
-            await CuentaDante.update({documento: Number(documento)}, req.body);
-            const registroActualizado = await CuentaDante.findOne({where: {documento: Number(documento)}});
+            // Asigna los nuevos valores a las propiedades del equipo
+            const cuentadanteModificado: DeepPartial<CuentaDante> = {
+                ...cuentadante,
+                ...otherFields,
+                estados
+              };
+              
+
+            // Guarda los cambios en la base de datos
+            await CuentaDante.save(cuentadanteModificado);
+
+            const registroActualizado = await CuentaDante.findOne({
+                where: { documento: Number(documento) }
+            });
 
             res.status(200).json(registroActualizado);
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+        } catch (err) {
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ import { Equipo } from "../models/equipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
 import { AppDataSource } from "../database/conexion";
 import { Estado } from "../models/estadoModel";
+import { DeepPartial } from "typeorm";
 
 class EquiposController{
     constructor(){
@@ -64,26 +65,36 @@ class EquiposController{
         }
     }
 
-    //Modificar equipo
+    //Método para actualizar equipos
     async modificarEquipo(req: Request, res: Response) {
         const { serial } = req.params;
-        const { cuentaDante, ...otherFields } = req.body;
+        const { cuentaDante, chequeos, mantenimientos, estados, ...otherFields } = req.body;
 
         try {
-            // Verifica si el propietario existe
-            // const propietarioRegistro = await CuentaDante.findOneBy({ documento: cuentaDante });
-            // if (!propietarioRegistro) {
-            //     throw new Error('Propietario no encontrado');
-            // }
+            const equipo = await Equipo.findOne({ where: { serial: serial }, relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos', 'estado'] });
 
-            const data = await Equipo.findOneBy({serial: serial});
-            if(!data){
-                throw new Error('Equipo no encontrado')
+            if (!equipo) {
+            throw new Error('Equipo no encontrado');
             }
 
-            //Actualizo el registro y le asigno el 'req.body'
-            await Equipo.update({serial: serial}, req.body);
-            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {cuentaDante: true, tipoEquipo: true}});
+            // Asigna los nuevos valores a las propiedades del equipo
+            const equipoModificado: DeepPartial<Equipo> = {
+                ...equipo,
+                ...otherFields,
+                cuentaDante,
+                chequeos,
+                mantenimientos,
+                estados
+              };
+              
+
+            // Guarda los cambios en la base de datos
+            await Equipo.save(equipoModificado);
+
+            const registroActualizado = await Equipo.findOne({
+                where: { serial: serial },
+                relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos']
+            });
 
             res.status(200).json(registroActualizado);
         } catch (err) {
@@ -92,6 +103,7 @@ class EquiposController{
             }
         }
     }
+    
 
     //Modificar estado del Equipo
     async actualizarEstadoEquipo(req: Request, res: Response) {

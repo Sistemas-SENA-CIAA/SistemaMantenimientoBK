@@ -11,7 +11,7 @@ router.get('/', cuentaDantes.listarCuentaDantes);
 
 router.route("/:documento")
     .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), cuentaDantes.obtenerCuentaDantesPorDocumento)
-    .put(verificarToken, validarRol(['ADMINISTRADOR']), cuentaDantes.modificarDatosCuentaDante)
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), cuentaDantes.modificarDatosCuentadante)
     
 
 

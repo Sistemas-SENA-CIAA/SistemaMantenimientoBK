@@ -42,7 +42,6 @@ class AuthController{
             if(!usuario){
                 return res.status(401).json({ error:'Usuario o Contraseña incorrectos' });
             }
-
             const contraseniaCorrecta = await bcrypt.compare(contrasenia, usuario.contrasenia);
 
             if(!contraseniaCorrecta){

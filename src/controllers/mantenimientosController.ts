@@ -116,14 +116,14 @@ class MantenimientosController{
         try {
           const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
             where: { idMantenimiento: parseInt(idMantenimiento) },
-            relations: ['equipos', 'usuarios', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],
+            relations: ['equipos', 'usuario', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],
           });
       
           if (!mantenimiento) {
             return res.status(404).json({ message: 'Mantenimiento no encontrado' });
           }
       
-          res.json(mantenimiento.equipos); // Devuelve los equipos asociados
+          res.json(mantenimiento.equipos); 
         } catch (error) {
           console.error('Error al obtener los equipos:', error);
           res.status(500).json({ message: 'Error al obtener los equipos' });

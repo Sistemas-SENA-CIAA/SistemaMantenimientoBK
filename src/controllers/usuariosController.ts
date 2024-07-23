@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Usuario } from "../models/usuarioModel";
 import { Estado } from "../models/estadoModel";
+import { DeepPartial } from "typeorm";
 
 class UsuariosController {
     constructor(){
@@ -35,19 +36,36 @@ class UsuariosController {
     
     async modificarDatosUsuario(req: Request, res: Response){
         const { documento } = req.params;
-        try{
-            const data = await Usuario.findOneBy({documento: Number(documento)});
-            if(!data){
-                throw new Error('Usuario no encontrado')
+        const { estado, ...otherFields } = req.body;
+
+        try {
+            const usuario = await Usuario.findOne({ where: { documento: Number(documento) }, relations: ['estado'] });
+
+            if (!usuario) {
+            throw new Error('usuario no encontrado');
             }
-    
-            await Usuario.update({documento: Number(documento)}, req.body);
-            const registroActualizado = await Usuario.findOne({where: {documento: Number(documento)}});
-    
+
+            // Asigna los nuevos valores a las propiedades del usuario
+            const equipoModificado: DeepPartial<Usuario> = {
+                ...usuario,
+                ...otherFields,
+                estado
+              };
+              
+
+            // Guarda los cambios en la base de datos
+            await Usuario.save(equipoModificado);
+
+            const registroActualizado = await Usuario.findOne({
+                where: { documento: Number(documento) },
+                relations: ['estado']
+            });
+
             res.status(200).json(registroActualizado);
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+        } catch (err) {
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 
