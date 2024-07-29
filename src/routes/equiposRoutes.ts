@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.agregarEquipo);
 
-router.get('/', equiposController.listarEquipos);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.listarEquipos);
 
 router.put('/:serial/estado', verificarToken, validarRol(['ADMINISTRADOR']), equiposController.actualizarEstadoEquipo);
 

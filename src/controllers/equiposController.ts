@@ -71,7 +71,7 @@ class EquiposController{
         const { cuentaDante, chequeos, mantenimientos, estados, ...otherFields } = req.body;
 
         try {
-            const equipo = await Equipo.findOne({ where: { serial: serial }, relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos', 'estado'] });
+            const equipo = await Equipo.findOne({ where: { serial: serial }, relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos'] });
 
             if (!equipo) {
             throw new Error('Equipo no encontrado');

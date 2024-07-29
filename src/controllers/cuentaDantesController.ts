@@ -28,7 +28,7 @@ class PropietariosController{
     //Listado de Propietarios
     async listarCuentaDantes(req: Request, res: Response){
         try {
-            const data = await CuentaDante.find({relations: {equipos: true}});
+            const data = await CuentaDante.find({relations: {equipos: true, estado: true}});
 
             res.status(200).json(data);
         } catch (err) {
@@ -54,21 +54,21 @@ class PropietariosController{
 
     async modificarDatosCuentadante(req: Request, res: Response) {
         const { documento } = req.params;
-        const {estados, ...otherFields } = req.body;
+        const {estado, ...otherFields } = req.body;
 
         try {
             const cuentadante = await CuentaDante.findOne({ where: { documento: Number(documento) }, relations: ['estado'] });
 
             if (!cuentadante) {
-            throw new Error('Equipo no encontrado');
+            throw new Error('Cuentadante no encontrado');
             }
 
-            // Asigna los nuevos valores a las propiedades del equipo
+            // Asigna los nuevos valores a las propiedades del cuentadante
             const cuentadanteModificado: DeepPartial<CuentaDante> = {
                 ...cuentadante,
                 ...otherFields,
-                estados
-              };
+                estado
+            };
               
 
             // Guarda los cambios en la base de datos

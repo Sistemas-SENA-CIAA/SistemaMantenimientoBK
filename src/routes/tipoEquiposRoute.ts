@@ -8,5 +8,7 @@ const router = express.Router();
 router.get('/', tipoEquiposController.listarTipoEquipos);
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), tipoEquiposController.agregarTipoEquipo);
+
+router.put('/:id', verificarToken, validarRol(['ADMINISTRADOR']), tipoEquiposController.modificarTipo);
     
 export default router;
