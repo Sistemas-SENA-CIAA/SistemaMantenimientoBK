@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { IsEmail, Length } from "class-validator";
 import { Rol } from "./rolModel";
 import { Mantenimiento } from "./mantenimientoModel";
 import { Estado } from "./estadoModel";
@@ -9,6 +10,7 @@ export class Usuario extends BaseEntity{
     documento: number;
 
     @Column("varchar", { length: 80 })
+    @Length(4, 20, { message: "El nombre de usuario debe tener entre 4 y 20 caracteres" })
     nombre: string;
 
     @Column('date', { name: 'fecha_inicio' })
@@ -21,9 +23,11 @@ export class Usuario extends BaseEntity{
     observaciones: String;
 
     @Column("varchar", { length: 80 })
+    @IsEmail({}, { message: "Debe proporcionar un correo electrónico válido" })
     correo: string;
 
     @Column()
+    @Length(6, 100, { message: "La contraseña debe tener al menos 6 caracteres" })
     contrasenia: string;
 
     @CreateDateColumn()

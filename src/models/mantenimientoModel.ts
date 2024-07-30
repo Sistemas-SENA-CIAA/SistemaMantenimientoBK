@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMan
 import { Insumo } from "./insumoModel";
 import { Usuario } from "./usuarioModel";
 import { Equipo } from "./equipoModel";
+import { Chequeo } from "./chequeoModel";
 
 @Entity('mantenimientos')
 export class Mantenimiento extends BaseEntity{
@@ -29,4 +30,7 @@ export class Mantenimiento extends BaseEntity{
 
     @ManyToMany(() => Equipo, equipo => equipo.mantenimientos)
     equipos: Equipo[];
+
+    @ManyToMany(() => Chequeo, chequeo => chequeo.mantenimientos)
+    chequeos: Chequeo[];
 }

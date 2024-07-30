@@ -2,35 +2,56 @@ import { Request, Response } from "express";
 import * as bcrypt from 'bcrypt';
 import { Usuario } from "../models/usuarioModel";
 import { generarToken } from "../helpers/tokenHelper";
+import { validate } from "class-validator";
 
 class AuthController{
     constructor(){
 
     }
 
-    async registrarUsuario(req: Request, res: Response) {
-        try {
-            const { documento } = req.body;
-    
-            // Verificar si el usuario ya existe
-            const usuarioExistente = await Usuario.findOneBy({ documento });
-    
-            if (usuarioExistente) {
-                return res.status(400).json({ error: 'Este usuario ya está registrado' });
-            }
-    
-            //Encriptación de contraseña
-            req.body.contrasenia = bcrypt.hashSync(req.body.contrasenia, 10);
 
-            const registro = await Usuario.save(req.body);
-    
-            res.status(201).json(registro);
-        } catch (err) {
-            if (err instanceof Error) {
-                res.status(500).send(err.message);
-            }
-        }
+  async registrarUsuario(req: Request, res: Response) {
+    try {
+      const { documento, nombre, fechaInicio, fechaFin, observaciones, correo, contrasenia, roles, estado } = req.body;
+  
+      //Verificamos si el usuario ya existe
+      const usuarioExistente = await Usuario.findOneBy({ documento });
+  
+      if (usuarioExistente) {
+        return res.status(400).json({ error: "Este usuario ya está registrado" });
+      }
+  
+      //Encriptación de contraseña
+      const hashedPassword = bcrypt.hashSync(contrasenia, 10);
+  
+      //Creamos instancia de Usuario
+      const usuario = new Usuario();
+      usuario.documento = documento;
+      usuario.nombre = nombre;
+      usuario.fechaInicio = fechaInicio;
+      usuario.fechaFin = fechaFin;
+      usuario.observaciones = observaciones;
+      usuario.correo = correo;
+      usuario.contrasenia = hashedPassword;
+      usuario.roles = roles;
+      usuario.estado = estado;
+  
+      //Validamos la instancia de Usuario
+      const errors = await validate(usuario);
+      if (errors.length > 0) {
+        return res.status(400).json({ errors });
+      }
+  
+      const registro = await Usuario.save(usuario);
+  
+      res.status(201).json(registro);
+    } catch (err) {
+      if (err instanceof Error) {
+        res.status(500).send(err.message);
+      }
     }
+  }
+  
 
     //Login de Usuario
     async loginUsuario(req: Request, res: Response){

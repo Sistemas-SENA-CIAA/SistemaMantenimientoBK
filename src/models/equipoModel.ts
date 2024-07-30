@@ -1,4 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { IsEmail, Length, IsNotEmpty } from "class-validator";
 import { TipoEquipo } from "./tipoEquipoModel";
 import { CuentaDante } from "./cuentaDanteModel";
 import { Estado } from "./estadoModel";

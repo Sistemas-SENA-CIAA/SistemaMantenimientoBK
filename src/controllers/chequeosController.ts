@@ -7,18 +7,6 @@ class ChequeosController{
 
     }
 
-    //Método para listar chequeos
-    async listarChequeos(req: Request, res: Response){
-      try{
-        const data = Chequeo.find();
-
-        res.status(200).json(data);
-      }catch (err) {
-        if(err instanceof Error)
-        res.status(500).send(err.message);
-      }
-    }
-
     //Método para crear un chequeo
     async agregarChequeo(req: Request, res: Response){
         try{
@@ -38,41 +26,40 @@ class ChequeosController{
         }
     }
 
-  async actualizarChequeo(req: Request, res: Response) {
-    const { idChequeo, descripcion, observaciones, equipo_serial } = req.body;
-      
-    try {
-          let chequeo = await Chequeo.findOne({ where: { idChequeo } });
-          let equipo = await Equipo.findOne({ where: { serial: equipo_serial } }); 
-          console.log("Chequeo: " + chequeo + "Equipo: " + equipo);
-          
-      
-          if (!equipo) {
-            return res.status(404).json({ message: 'Equipo no encontrado' });
-          }
-      
-          if (chequeo) {
-            //Actualiza el chequeo existente
-            chequeo.descripcion = descripcion;
-            chequeo.observaciones = observaciones;
-            chequeo.equipo.serial = equipo_serial;  
-            await chequeo.save();  // Guarda los cambios
-          } else {
-            // Crea un nuevo chequeo si no existe
-            chequeo = await Chequeo.create({
-              descripcion,
-              observaciones,
-              equipo // Asigna el ID del equipo encontrado
-            });
-            await chequeo.save(); // Guarda el nuevo chequeo
-          }
-      
-          res.status(200).json({ message: 'Chequeo actualizado correctamente' });
-    } catch (error) {
-          console.error('Error al actualizar chequeo:', error);
-          res.status(500).json({ message: 'Error al actualizar chequeo', error });
+    async actualizarChequeo(req: Request, res: Response) {
+        const { idChequeo, descripcion, observaciones, equipo_serial } = req.body;
+
+        try {
+            let chequeo = await Chequeo.findOne({ where: { idChequeo } });
+            let equipo = await Equipo.findOne({ where: { serial: equipo_serial } }); 
+
+            if (!equipo) {
+                return res.status(404).json({ message: 'Equipo no encontrado' });
+            }
+
+            //Si el chequeo existe, se le asigna la nueva info que viene en el req.body
+            if (chequeo) {
+                chequeo.descripcion = descripcion;
+                chequeo.observaciones = observaciones;
+                chequeo.equipo = equipo; 
+                await chequeo.save();
+                //Si el equipo no existe, se crea uno nuevo y se le asigna la info
+            } else {
+                chequeo = Chequeo.create({
+                    idChequeo,
+                    descripcion,
+                    observaciones,
+                    equipo // Asigna el equipo encontrado
+                });
+                await chequeo.save();
+            }
+
+            res.status(200).json({ message: 'Chequeo actualizado correctamente' });
+        } catch (error) {
+            console.error('Error al actualizar chequeo:', error);
+            res.status(500).json({ message: 'Error al actualizar chequeo', error });
+        }
     }
-  }   
 }
 
 export default new ChequeosController();
