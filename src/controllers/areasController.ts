@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Area } from "../models/areaModel";
 import { DeepPartial } from "typeorm";
+import { validate } from "class-validator";
 
 class AreasController{
     constructor(){
@@ -9,7 +10,19 @@ class AreasController{
 
     async agregarArea(req: Request, res: Response){
         try{
-            const { codigo } = req.body;
+            const { codigo, nombre, zona, coordenadas, equipos } = req.body;
+
+            const area = new Area();
+            area.codigo = codigo;
+            area.nombre = nombre;
+            area.zona = zona;
+            area.coordenadas = coordenadas;
+            area.equipos = equipos;
+            
+            const errors = await validate(area);
+            if (errors.length > 0) {
+              return res.status(400).json({ errors });
+            }
 
             const areaExistente = await Area.findOneBy({codigo: codigo})
             if(areaExistente){

@@ -1,8 +1,9 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { IsEmail, Length } from "class-validator";
+import { IsEmail, Length, IsDate, IsDateString } from "class-validator";
 import { Rol } from "./rolModel";
 import { Mantenimiento } from "./mantenimientoModel";
 import { Estado } from "./estadoModel";
+import { IsBefore } from "../validators/IsBeforeConstraint";
 
 @Entity('usuarios')
 export class Usuario extends BaseEntity{
@@ -14,6 +15,7 @@ export class Usuario extends BaseEntity{
     nombre: string;
 
     @Column('date', { name: 'fecha_inicio' })
+    @IsBefore('fechaFin', { message: "La fecha de inicio debe ser anterior a la fecha de fin" })
     fechaInicio: Date;
 
     @Column('date', { name: 'fecha_fin' })

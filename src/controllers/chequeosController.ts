@@ -1,65 +1,73 @@
 import { Request, Response } from "express";
-import { Chequeo } from "../models/chequeoModel";
-import { Equipo } from "../models/equipoModel";
+import { Chequeo } from '../models/chequeoModel';
+import { Equipo } from '../models/equipoModel';
+import { Mantenimiento } from '../models/mantenimientoModel';
 
-class ChequeosController{
+
+export class ChequeosController{
     constructor(){
 
     }
 
-    //Método para crear un chequeo
-    async agregarChequeo(req: Request, res: Response){
-        try{
-            const { equipo_serial, descripcion, observaciones } = req.body;
-
-            const nuevoChequeo = new Chequeo();
-            nuevoChequeo.equipo = equipo_serial;
-            nuevoChequeo.observaciones = observaciones;
-            nuevoChequeo.descripcion = descripcion;
+    async addOrUpdateChequeo(req: Request, res: Response){
+        const { equipoSerial, mantenimientoId, descripcion, observaciones } = req.body;
     
-            await nuevoChequeo.save();
-    
-            return res.status(201).json({ message: "Chequeo creado correctamente", chequeo: nuevoChequeo });
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
-        }
-    }
-
-    async actualizarChequeo(req: Request, res: Response) {
-        const { idChequeo, descripcion, observaciones, equipo_serial } = req.body;
-
         try {
-            let chequeo = await Chequeo.findOne({ where: { idChequeo } });
-            let equipo = await Equipo.findOne({ where: { serial: equipo_serial } }); 
-
-            if (!equipo) {
-                return res.status(404).json({ message: 'Equipo no encontrado' });
-            }
-
-            //Si el chequeo existe, se le asigna la nueva info que viene en el req.body
+            // Buscar si ya existe un chequeo para el equipo y mantenimiento dado
+            let chequeo = await Chequeo.findOne({
+                where: { equipo: { serial: equipoSerial }, mantenimiento: { idMantenimiento: mantenimientoId } },
+                relations: ['equipo', 'mantenimiento']
+            });
+    
             if (chequeo) {
+                // Si existe, actualizar la descripción y observaciones
                 chequeo.descripcion = descripcion;
                 chequeo.observaciones = observaciones;
-                chequeo.equipo = equipo; 
-                await chequeo.save();
-                //Si el equipo no existe, se crea uno nuevo y se le asigna la info
             } else {
-                chequeo = Chequeo.create({
-                    idChequeo,
-                    descripcion,
-                    observaciones,
-                    equipo // Asigna el equipo encontrado
-                });
-                await chequeo.save();
+                // Si no existe, crear uno nuevo
+                const equipo = await Equipo.findOne({ where: { serial: equipoSerial } });
+                const mantenimiento = await Mantenimiento.findOne({ where: { idMantenimiento: mantenimientoId } });
+    
+                if (!equipo || !mantenimiento) {
+                    return res.status(404).json({ message: 'Equipo o Mantenimiento no encontrado' });
+                }
+    
+                chequeo = new Chequeo();
+                chequeo.descripcion = descripcion;
+                chequeo.observaciones = observaciones;
+                chequeo.equipo = equipo;
+                chequeo.mantenimiento = mantenimiento;
             }
-
-            res.status(200).json({ message: 'Chequeo actualizado correctamente' });
-        } catch (error) {
-            console.error('Error al actualizar chequeo:', error);
-            res.status(500).json({ message: 'Error al actualizar chequeo', error });
+    
+            // Guardar el chequeo en la base de datos
+            await chequeo.save();
+    
+            res.status(200).json({ message: 'Chequeo guardado correctamente', chequeo });
+        }catch (error) {
+            console.error('Error al guardar el chequeo:', error);
+            res.status(500).json({ message: 'Error al guardar el chequeo' });
         }
-    }
+    };
+
+    async getChequeosByMantenimiento(req: Request, res: Response) {
+        const { mantenimientoId } = req.params;
+    
+        try {
+            const chequeos = await Chequeo.find({
+                where: { mantenimiento: { idMantenimiento: Number(mantenimientoId) } },
+                relations: ['equipo', 'mantenimiento']
+            });
+    
+            if (!chequeos.length) {
+                return res.status(404).json({ message: 'No se encontraron chequeos para el mantenimiento especificado' });
+            }
+    
+            res.status(200).json(chequeos);
+        } catch (error) {
+            console.error('Error al obtener los chequeos:', error);
+            res.status(500).json({ message: 'Error al obtener los chequeos' });
+        }
+    };
 }
 
 export default new ChequeosController();

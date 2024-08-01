@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { TipoEquipo } from "../models/tipoEquipoModel";
 import { DeepPartial } from "typeorm";
+import { validate } from "class-validator";
 
 export class TipoEquiposController{
     constructor(){
@@ -16,9 +17,19 @@ export class TipoEquiposController{
         }
     }
 
+    //Agregar Nuevo tipo de equipo
     async agregarTipoEquipo(req: Request, res: Response){
         try {
-            const registro = await TipoEquipo.save(req.body);
+            const { nombre } = req.body;
+        
+            const tipo = new TipoEquipo();
+            tipo.nombre = nombre;
+
+            const errors = await validate(tipo);
+            if (errors.length > 0) {
+              return res.status(400).json({ errors });
+            }
+            const registro = await TipoEquipo.save(tipo);
 
             res.status(201).json(registro);
         } catch (err) {

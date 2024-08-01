@@ -46,7 +46,7 @@ class UsuariosController {
             }
 
             // Asigna los nuevos valores a las propiedades del usuario
-            const equipoModificado: DeepPartial<Usuario> = {
+            const usuarioModificado: DeepPartial<Usuario> = {
                 ...usuario,
                 ...otherFields,
                 estado
@@ -54,7 +54,7 @@ class UsuariosController {
               
 
             // Guarda los cambios en la base de datos
-            await Usuario.save(equipoModificado);
+            await Usuario.save(usuarioModificado);
 
             const registroActualizado = await Usuario.findOne({
                 where: { documento: Number(documento) },

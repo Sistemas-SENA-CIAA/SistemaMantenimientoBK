@@ -1,10 +1,10 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipoModel";
-import { Mantenimiento } from "./mantenimientoModel";
+import { Mantenimiento } from "./mantenimientoModel"; // Asegúrate de importar tu modelo de Mantenimiento
 
 @Entity('chequeos')
-export class Chequeo extends BaseEntity{
-    @PrimaryGeneratedColumn({name: 'id_chequeo'})
+export class Chequeo extends BaseEntity {
+    @PrimaryGeneratedColumn({ name: 'id_chequeo' })
     idChequeo: number;
 
     @Column("varchar", { length: 50 })
@@ -14,16 +14,10 @@ export class Chequeo extends BaseEntity{
     observaciones: string;
 
     @ManyToOne(() => Equipo, (equipo) => equipo.chequeos)
-    @JoinColumn({name: 'equipo_serial' })
+    @JoinColumn({ name: 'equipo_serial' })
     equipo: Equipo;
 
-    @ManyToMany(() => Mantenimiento, mantenimiento => mantenimiento.chequeos)
-    @JoinTable({
-        name: 'mantenimientos_chequeos',
-        joinColumn: { name: 'chequeo_id',
-        referencedColumnName: 'idChequeo' },
-        inverseJoinColumn: { name: 'mantenimiento_id',
-         referencedColumnName: 'idMantenimiento'}
-    })
-    mantenimientos: Mantenimiento[];
+    @ManyToOne(() => Mantenimiento, (mantenimiento) => mantenimiento.chequeos)
+    @JoinColumn({ name: 'mantenimiento_id' })
+    mantenimiento: Mantenimiento;
 }

@@ -4,6 +4,7 @@ import { Mantenimiento } from "../models/mantenimientoModel";
 import { AppDataSource } from "../database/conexion";
 import { Equipo } from "../models/equipoModel";
 import { In } from "typeorm";
+import { validate } from "class-validator";
 
 class MantenimientosController{
     constructor(){
@@ -11,7 +12,7 @@ class MantenimientosController{
 
     async agregarMantenimiento(req: Request, res: Response){
         try{
-            const { usuario } = req.body;
+            const { objetivo, fechaProxMantenimiento, fechaUltimoMantenimiento, usuario, equipos, chequeosMantenimiento } = req.body;
 
             //Verificación de que exista el usuario
             const usuarioRegistro = await Usuario.findOneBy({documento: usuario});
@@ -19,7 +20,20 @@ class MantenimientosController{
                 throw new Error('Usuario no encontrado')
             }
 
-            const registro = await Mantenimiento.save(req.body);
+            const mantenimiento = new Mantenimiento();
+            mantenimiento.objetivo = objetivo;
+            mantenimiento.fechaProxMantenimiento = fechaProxMantenimiento;
+            mantenimiento.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
+            mantenimiento.usuario = usuario;
+            mantenimiento.equipos = equipos;
+            mantenimiento.chequeosMantenimiento = chequeosMantenimiento;
+
+            const errors = await validate(mantenimiento);
+            if (errors.length > 0) {
+              return res.status(400).json({ errors });
+            }
+
+            const registro = await Mantenimiento.save(mantenimiento);
             res.status(201).json(registro);
         }catch(err){
             if(err instanceof Error)
@@ -29,7 +43,7 @@ class MantenimientosController{
 
     async listarMantenimientos(req: Request, res: Response){
         try{
-            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],});
+            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area' ]});
             res.status(200).json(data);
         }catch(err){
             if(err instanceof Error)
@@ -116,7 +130,7 @@ class MantenimientosController{
         try {
           const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
             where: { idMantenimiento: parseInt(idMantenimiento) },
-            relations: ['equipos', 'usuario', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'],
+            relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area', 'equipos.chequeos.mantenimiento' ],
           });
       
           if (!mantenimiento) {

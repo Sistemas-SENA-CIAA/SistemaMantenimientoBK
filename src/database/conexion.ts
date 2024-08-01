@@ -2,15 +2,13 @@ import { DataSource } from "typeorm";
 import { Equipo } from "../models/equipoModel";
 import { TipoEquipo } from "../models/tipoEquipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
-import { IntegranteEquipo } from "../models/integranteEquipoModel";
 import { Mantenimiento } from "../models/mantenimientoModel";
-import { Insumo } from "../models/insumoModel";
 import { Usuario } from "../models/usuarioModel";
 import { Rol } from "../models/rolModel";
 import { Estado } from "../models/estadoModel";
 import { Chequeo } from "../models/chequeoModel";
-import { Proveedor } from "../models/proveedorModel";
 import { Area } from "../models/areaModel";
+import { ChequeoMantenimiento } from "../models/ChequeoMantenimiento";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -18,9 +16,9 @@ export const AppDataSource = new DataSource({
     port: 3306,
     username: "root",
     password: "",
-    database: "sistemantenimiento",
+    database: "sismantenimiento",
     logging: true,
-    entities: [Equipo, TipoEquipo, CuentaDante, IntegranteEquipo, Mantenimiento, Insumo, Usuario, Rol, Estado, Chequeo, Proveedor, Area],
+    entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Area, ChequeoMantenimiento],
     synchronize: false
 })
 

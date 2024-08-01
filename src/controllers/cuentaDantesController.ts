@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CuentaDante } from "../models/cuentaDanteModel";
 import { DeepPartial } from "typeorm";
+import { validate } from "class-validator";
 
 class PropietariosController{
     constructor(){
@@ -8,7 +9,21 @@ class PropietariosController{
 
     async agregarCuentaDante(req: Request, res: Response){
         try {
-            const { documento } = req.body;
+            const { documento, nombre, dependencia, departamento, tipoContrato, equipos, estado } = req.body;
+
+            const cuentadante = new CuentaDante();
+            cuentadante.documento = documento;
+            cuentadante.nombre = nombre;
+            cuentadante.dependencia = dependencia;
+            cuentadante.departamento = departamento;
+            cuentadante.tipoContrato = tipoContrato;
+            cuentadante.equipos = equipos;
+            cuentadante.estado = estado;
+
+            const errors = await validate(cuentadante);
+            if (errors.length > 0) {
+              return res.status(400).json({ errors });
+            }
 
             //Verificación existencia del propietario
             const cuentaDanteExistente = await CuentaDante.findOneBy({documento : documento});

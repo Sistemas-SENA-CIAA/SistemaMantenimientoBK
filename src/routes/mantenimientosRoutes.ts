@@ -5,15 +5,15 @@ import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.listarMantenimientos);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO', 'USUARIO DE CONSULTA']), mantenimientosController.listarMantenimientos);
 
-router.get('/:idMantenimiento/equipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.listarEquiposAsociadosMantenimiento)
+router.get('/:idMantenimiento/equipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO', 'USUARIO DE CONSULTA']), mantenimientosController.listarEquiposAsociadosMantenimiento)
 
-router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.agregarMantenimiento);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.agregarMantenimiento);
 
-router.post('/asociaEquipos', verificarToken, mantenimientosController.asociarEquipos)
+router.post('/asociaEquipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.asociarEquipos)
 
 router.route("/:idMantenimiento")
-    .put(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), mantenimientosController.modificarMantenimiento)
+    .put(verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.modificarMantenimiento)
 
 export default router
