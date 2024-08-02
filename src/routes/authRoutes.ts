@@ -10,7 +10,7 @@ router.post('/registro', authController.registrarUsuario);
 
 router.post('/login', validarEstado(true), authController.loginUsuario);
 
-router.get('/ruta-protegida', verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO']),authController.saludar);
+router.get('/ruta-protegida', authController.saludar);
 
 
 export default router;
