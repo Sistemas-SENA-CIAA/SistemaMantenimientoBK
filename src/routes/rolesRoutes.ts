@@ -12,7 +12,7 @@ router.get('/', rolesController.listarRoles);
 router.post('/', rolesController.agregarRol);
 
 //Ruta POST para los Asociar usuarios
-router.post('/asociaUsuarios',rolesController.asociarUsuario);
+router.post('/asociaUsuarios', rolesController.asociarUsuario);
 
 
 export default router;

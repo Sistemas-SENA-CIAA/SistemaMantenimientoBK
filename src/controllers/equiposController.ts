@@ -3,6 +3,8 @@ import { Equipo } from "../models/equipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
 import { AppDataSource } from "../database/conexion";
 import { Estado } from "../models/estadoModel";
+import { DeepPartial } from "typeorm";
+import { validate } from "class-validator";
 
 class EquiposController{
     constructor(){
@@ -11,7 +13,7 @@ class EquiposController{
     //Agregar equipo
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { serial, cuentaDante } = req.body;
+            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, area, mantenimientos, chequeosMantenimiento } = req.body;
 
             //Verificamos que no exista un equipo con el mismo serial
             const equipoExistente = await Equipo.findOneBy({serial: serial});
@@ -25,8 +27,27 @@ class EquiposController{
                 throw new Error ('Propietario no encontrado')
             }
 
+            const equipo = new Equipo();
+            equipo.serial = serial;
+            equipo.marca = marca;
+            equipo.referencia = referencia;
+            equipo.fechaCompra = fechaCompra;
+            equipo.placaSena = placaSena;
+            equipo.cuentaDante = cuentaDante;
+            equipo.tipoEquipo = tipoEquipo;
+            equipo.estado = estado;
+            equipo.chequeos = chequeos;
+            equipo.area = area;
+            equipo.mantenimientos = mantenimientos;
+            equipo.chequeosMantenimiento = chequeosMantenimiento;
+
+            const errors = await validate(equipo);
+            if (errors.length > 0) {
+              return res.status(400).json({ errors });
+            }
+
             //Guardamos el equipo
-            const registro = await Equipo.save(req.body);
+            const registro = await Equipo.save(equipo);
             res.status(201).json(registro);
         } catch (err) {
             if(err instanceof Error)
@@ -64,64 +85,42 @@ class EquiposController{
         }
     }
 
-    //Modificar equipo
+    //Método para actualizar equipos
     async modificarEquipo(req: Request, res: Response) {
         const { serial } = req.params;
-        const { cuentaDante, ...otherFields } = req.body;
+        const { cuentaDante, chequeos, mantenimientos, estados, ...otherFields } = req.body;
 
         try {
-            // Verifica si el propietario existe
-            // const propietarioRegistro = await CuentaDante.findOneBy({ documento: cuentaDante });
-            // if (!propietarioRegistro) {
-            //     throw new Error('Propietario no encontrado');
-            // }
+            const equipo = await Equipo.findOne({ where: { serial: serial }, relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos'] });
 
-            const data = await Equipo.findOneBy({serial: serial});
-            if(!data){
-                throw new Error('Equipo no encontrado')
+            if (!equipo) {
+            throw new Error('Equipo no encontrado');
             }
 
-            //Actualizo el registro y le asigno el 'req.body'
-            await Equipo.update({serial: serial}, req.body);
-            const registroActualizado = await Equipo.findOne({where: {serial: serial}, relations: {cuentaDante: true, tipoEquipo: true}});
+            // Asigna los nuevos valores a las propiedades del equipo
+            const equipoModificado: DeepPartial<Equipo> = {
+                ...equipo,
+                ...otherFields,
+                cuentaDante,
+                chequeos,
+                mantenimientos,
+                estados
+              };
+              
+
+            // Guarda los cambios en la base de datos
+            await Equipo.save(equipoModificado);
+
+            const registroActualizado = await Equipo.findOne({
+                where: { serial: serial },
+                relations: ['cuentaDante', 'tipoEquipo', 'chequeos', 'mantenimientos']
+            });
 
             res.status(200).json(registroActualizado);
         } catch (err) {
             if (err instanceof Error) {
                 res.status(500).send(err.message);
             }
-        }
-    }
-
-    //Modificar estado del Equipo
-    async actualizarEstadoEquipo(req: Request, res: Response) {
-        const { serial } = req.params;
-    
-        try {
-            const equipo = await Equipo.findOne({ where: { serial : serial }, relations: ["estado"] });
-        
-            if (equipo) {
-                //Se cambia el estado
-                const nuevoEstadoValor = !equipo.estado.estado;
-                let nuevoEstado = await Estado.findOne({ where: { estado: nuevoEstadoValor } });
-        
-                //Se crea un nuevo estado en caso de que no exista
-                if (!nuevoEstado) {
-                    nuevoEstado = Estado.create({ estado: nuevoEstadoValor });
-                    await Estado.save(nuevoEstado);
-                }
-        
-                //Actualizo equipo con el nuevo estado 
-                equipo.estado = nuevoEstado;
-                const equipoActualizado = await Equipo.save(equipo);
-        
-                return res.status(200).json(equipoActualizado);
-            } else {
-                return res.status(404).json({ error: 'Equipo no encontrado' });
-            }
-        } catch (err) {
-            if(err instanceof Error)
-            res.status(500).send(err.message);
         }
     }
 }

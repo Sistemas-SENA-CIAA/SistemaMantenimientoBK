@@ -5,13 +5,13 @@ import validarRol from '../middlewares/rolValidatorMiddleware';
 
 const router = express.Router();
 
-router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), cuentaDantes.agregarCuentaDante);
+router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), cuentaDantes.agregarCuentaDante);
 
-router.get('/', cuentaDantes.listarCuentaDantes);
+router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO', 'USUARIO DE CONSULTA']), cuentaDantes.listarCuentaDantes);
 
 router.route("/:documento")
-    .get(verificarToken, validarRol(['ADMINISTRADOR', 'RESPONSABLE']), cuentaDantes.obtenerCuentaDantesPorDocumento)
-    .put(verificarToken, validarRol(['ADMINISTRADOR']), cuentaDantes.modificarDatosCuentaDante)
+    .get(verificarToken, validarRol(['ADMINISTRADOR', 'USUARIO DE CONSULTA']), cuentaDantes.obtenerCuentaDantesPorDocumento)
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), cuentaDantes.modificarDatosCuentadante)
     
 
 
