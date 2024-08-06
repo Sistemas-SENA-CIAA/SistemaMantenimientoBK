@@ -10,13 +10,16 @@ import { Chequeo } from "../models/chequeoModel";
 import { Area } from "../models/areaModel";
 import { ChequeoMantenimiento } from "../models/ChequeoMantenimiento";
 
+import { config } from "dotenv";
+config();
+
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
-    port: 3306,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
     username: "root",
-    password: "",
-    database: "sismantenimiento",
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     logging: true,
     entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Area, ChequeoMantenimiento],
     synchronize: false
