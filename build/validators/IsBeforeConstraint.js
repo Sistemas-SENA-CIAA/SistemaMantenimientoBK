@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsBefore = IsBefore;
+exports.IsBefore = void 0;
 const class_validator_1 = require("class-validator");
 let IsBeforeConstraint = class IsBeforeConstraint {
     validate(propertyValue, args) {
@@ -37,3 +37,4 @@ function IsBefore(property, validationOptions) {
         });
     };
 }
+exports.IsBefore = IsBefore;
