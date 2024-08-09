@@ -13,9 +13,12 @@ import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import estadosRoutes from './routes/estadosRoutes';
 import areasRoutes from './routes/areasRoutes';
 import chequeosRoutes from './routes/chequeosRoutes'
-import swaggerRoutes from './routes/swaggerRoutes'
+import { swaggerSpec } from './swaggerConfig';
+import  swaggerUi  from 'swagger-ui-express';
 
 const app = express();
+
+app.use('/swagger-ui.html', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 // parse application/x-www-form-urlencoded
@@ -32,7 +35,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 //Rutas de la APP
-app.use('/', swaggerRoutes);
 app.use("/equipos", equiposRoutes);
 app.use("/tipoEquipos", tipoEquiposRoutes);
 app.use("/cuentadantes", cuentaDantesRoutes);
