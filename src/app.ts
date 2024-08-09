@@ -13,8 +13,12 @@ import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import estadosRoutes from './routes/estadosRoutes';
 import areasRoutes from './routes/areasRoutes';
 import chequeosRoutes from './routes/chequeosRoutes'
+import { swaggerSpec } from './swaggerConfig';
+import  swaggerUi  from 'swagger-ui-express';
 
 const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

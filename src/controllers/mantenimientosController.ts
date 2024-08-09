@@ -12,7 +12,7 @@ class MantenimientosController{
 
     async agregarMantenimiento(req: Request, res: Response){
         try{
-            const { objetivo, fechaProxMantenimiento, fechaUltimoMantenimiento, usuario, equipos, chequeosMantenimiento, tipoMantenimiento } = req.body;
+            const { objetivo, tipoMantenimiento, fechaProxMantenimiento, fechaUltimoMantenimiento, usuario, equipos, chequeosMantenimiento } = req.body;
 
             //Verificación de que exista el usuario
             const usuarioRegistro = await Usuario.findOneBy({documento: usuario});
@@ -22,9 +22,9 @@ class MantenimientosController{
 
             const mantenimiento = new Mantenimiento();
             mantenimiento.objetivo = objetivo;
+            mantenimiento.tipoMantenimiento = tipoMantenimiento;
             mantenimiento.fechaProxMantenimiento = fechaProxMantenimiento;
             mantenimiento.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
-            mantenimiento.tipoMantenimiento = tipoMantenimiento;
             mantenimiento.usuario = usuario;
             mantenimiento.equipos = equipos;
             mantenimiento.chequeosMantenimiento = chequeosMantenimiento;

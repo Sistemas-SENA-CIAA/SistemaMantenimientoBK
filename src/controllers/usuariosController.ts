@@ -109,7 +109,7 @@ class UsuariosController {
                 return res.status(404).json({ message: 'Usuario no encontrado' });
             }
     
-            // Suponiendo que el usuario puede tener múltiples roles, se selecciona el primer rol
+            //Seleccionamos primer rol del usuario
             const rol = usuario.roles.length > 0 ? usuario.roles[0].nombre : null;
     
             res.json({ rol });
