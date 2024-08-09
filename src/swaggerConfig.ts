@@ -9,7 +9,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'https://mantenimiento-front.vercel.app',
+            url: 'sistemamantenimiento-production.up.railway.app',
             description: 'Servidor',
         },
     ],
