@@ -15,9 +15,14 @@ const rolesRoutes_1 = __importDefault(require("./routes/rolesRoutes"));
 const usuariosRoutes_1 = __importDefault(require("./routes/usuariosRoutes"));
 const mantenimientosRoutes_1 = __importDefault(require("./routes/mantenimientosRoutes"));
 const estadosRoutes_1 = __importDefault(require("./routes/estadosRoutes"));
-const areasRoutes_1 = __importDefault(require("./routes/areasRoutes"));
+const sedesRoutes_1 = __importDefault(require("./routes/sedesRoutes"));
 const chequeosRoutes_1 = __importDefault(require("./routes/chequeosRoutes"));
+const subsedesRoutes_1 = __importDefault(require("./routes/subsedesRoutes"));
+const dependenciasRoutes_1 = __importDefault(require("./routes/dependenciasRoutes"));
+const swaggerConfig_1 = require("./swaggerConfig");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const app = (0, express_1.default)();
+app.use('/swagger-ui.html', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerConfig_1.swaggerSpec));
 // parse application/x-www-form-urlencoded
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // parse application/json
@@ -37,6 +42,8 @@ app.use('/roles', rolesRoutes_1.default);
 app.use('/usuarios', usuariosRoutes_1.default);
 app.use('/mantenimientos', mantenimientosRoutes_1.default);
 app.use('/estados', estadosRoutes_1.default);
-app.use('/areas', areasRoutes_1.default);
+app.use('/sedes', sedesRoutes_1.default);
 app.use('/chequeos', chequeosRoutes_1.default);
+app.use('/subsedes', subsedesRoutes_1.default);
+app.use('/dependencias', dependenciasRoutes_1.default);
 exports.default = app;

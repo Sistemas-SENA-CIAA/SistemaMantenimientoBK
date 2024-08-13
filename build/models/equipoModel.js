@@ -17,7 +17,8 @@ const cuentaDanteModel_1 = require("./cuentaDanteModel");
 const estadoModel_1 = require("./estadoModel");
 const chequeoModel_1 = require("./chequeoModel");
 const mantenimientoModel_1 = require("./mantenimientoModel");
-const areaModel_1 = require("./areaModel");
+const sedeModel_1 = require("./sedeModel");
+const subsedeModel_1 = require("./subsedeModel");
 const ChequeoMantenimiento_1 = require("./ChequeoMantenimiento");
 let Equipo = class Equipo extends typeorm_1.BaseEntity {
 };
@@ -73,10 +74,15 @@ __decorate([
     __metadata("design:type", Array)
 ], Equipo.prototype, "chequeos", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => areaModel_1.Area, (area) => area.equipos),
-    (0, typeorm_1.JoinColumn)({ name: 'area_codigo' }),
-    __metadata("design:type", areaModel_1.Area)
-], Equipo.prototype, "area", void 0);
+    (0, typeorm_1.ManyToOne)(() => sedeModel_1.Sede, (sede) => sede.equipos),
+    (0, typeorm_1.JoinColumn)({ name: 'sede_id' }),
+    __metadata("design:type", sedeModel_1.Sede)
+], Equipo.prototype, "sede", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => subsedeModel_1.Subsede, (subsede) => subsede.equipos),
+    (0, typeorm_1.JoinColumn)({ name: 'subsede_id' }),
+    __metadata("design:type", subsedeModel_1.Subsede)
+], Equipo.prototype, "subsede", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => mantenimientoModel_1.Mantenimiento, mantenimiento => mantenimiento.equipos),
     (0, typeorm_1.JoinTable)({

@@ -30,7 +30,7 @@ class EquiposController {
     agregarEquipo(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, area, mantenimientos, chequeosMantenimiento } = req.body;
+                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, mantenimientos, chequeosMantenimiento } = req.body;
                 //Verificamos que no exista un equipo con el mismo serial
                 const equipoExistente = yield equipoModel_1.Equipo.findOneBy({ serial: serial });
                 if (equipoExistente) {
@@ -51,7 +51,8 @@ class EquiposController {
                 equipo.tipoEquipo = tipoEquipo;
                 equipo.estado = estado;
                 equipo.chequeos = chequeos;
-                equipo.area = area;
+                equipo.sede = sede;
+                equipo.subsede = subsede;
                 equipo.mantenimientos = mantenimientos;
                 equipo.chequeosMantenimiento = chequeosMantenimiento;
                 const errors = yield (0, class_validator_1.validate)(equipo);
@@ -72,7 +73,7 @@ class EquiposController {
     listarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield equipoModel_1.Equipo.find({ relations: { cuentaDante: true, tipoEquipo: true, estado: true, area: true, chequeos: true, mantenimientos: true } });
+                const data = yield equipoModel_1.Equipo.find({ relations: { cuentaDante: true, tipoEquipo: true, estado: true, subsede: true, chequeos: true, mantenimientos: true } });
                 res.status(200).json(data);
             }
             catch (err) {
@@ -89,7 +90,7 @@ class EquiposController {
                 const registro = yield equipoModel_1.Equipo.findOne({ where: {
                         serial: serial
                     },
-                    relations: { cuentaDante: true, tipoEquipo: true, area: true }
+                    relations: { cuentaDante: true, tipoEquipo: true, subsede: true }
                 });
                 if (!registro) {
                     throw new Error('Equipo no encontrado');

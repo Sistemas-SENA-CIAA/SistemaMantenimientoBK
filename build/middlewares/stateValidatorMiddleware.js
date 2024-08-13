@@ -11,14 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const conexion_1 = require("../database/conexion");
 const usuarioModel_1 = require("../models/usuarioModel");
-// Recibimos un arreglo con los roles permitidos
+//Recibimos un arreglo con los roles permitidos
 const validarEstado = (estadoPermitido) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const { correo } = req.body;
         try {
-            // Obtenemos repositorio de usuarios
+            //Obtenemos repositorio de usuarios
             const usuarioRepo = conexion_1.AppDataSource.getRepository(usuarioModel_1.Usuario);
-            // Obtenemos el usuario con su estado
+            //Obtenemos el usuario con su estado
             const usuarioConEstado = yield usuarioRepo.findOne({
                 where: { correo },
                 relations: ['estado']

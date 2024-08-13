@@ -26,12 +26,12 @@ class ChequeosController {
                     relations: ['equipo', 'mantenimiento']
                 });
                 if (chequeo) {
-                    // Si existe, actualizar la descripción y observaciones
+                    //Si existe chequeo, actualizamos la descripción y observaciones
                     chequeo.descripcion = descripcion;
                     chequeo.observaciones = observaciones;
                 }
                 else {
-                    // Si no existe, crear uno nuevo
+                    //Si no existe, cremos uno nuevo
                     const equipo = yield equipoModel_1.Equipo.findOne({ where: { serial: equipoSerial } });
                     const mantenimiento = yield mantenimientoModel_1.Mantenimiento.findOne({ where: { idMantenimiento: mantenimientoId } });
                     if (!equipo || !mantenimiento) {
@@ -43,7 +43,7 @@ class ChequeosController {
                     chequeo.equipo = equipo;
                     chequeo.mantenimiento = mantenimiento;
                 }
-                // Guardar el chequeo en la base de datos
+                //Guardamos el chequeo en la base de datos
                 yield chequeo.save();
                 res.status(200).json({ message: 'Chequeo guardado correctamente', chequeo });
             }

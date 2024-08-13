@@ -21,7 +21,7 @@ class MantenimientosController {
     agregarMantenimiento(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { objetivo, fechaProxMantenimiento, fechaUltimoMantenimiento, usuario, equipos, chequeosMantenimiento } = req.body;
+                const { objetivo, tipoMantenimiento, fechaProxMantenimiento, fechaUltimoMantenimiento, usuario, equipos, chequeosMantenimiento } = req.body;
                 //Verificación de que exista el usuario
                 const usuarioRegistro = yield usuarioModel_1.Usuario.findOneBy({ documento: usuario });
                 if (!usuarioRegistro) {
@@ -29,6 +29,7 @@ class MantenimientosController {
                 }
                 const mantenimiento = new mantenimientoModel_1.Mantenimiento();
                 mantenimiento.objetivo = objetivo;
+                mantenimiento.tipoMantenimiento = tipoMantenimiento;
                 mantenimiento.fechaProxMantenimiento = fechaProxMantenimiento;
                 mantenimiento.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
                 mantenimiento.usuario = usuario;
