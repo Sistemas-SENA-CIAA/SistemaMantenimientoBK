@@ -50,7 +50,7 @@ class DependenciasController {
     listarDependencias(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield dependenciaModel_1.Dependencia.find();
+                const data = yield dependenciaModel_1.Dependencia.find({ relations: { subsede: true } });
                 res.status(200).json(data);
             }
             catch (err) {

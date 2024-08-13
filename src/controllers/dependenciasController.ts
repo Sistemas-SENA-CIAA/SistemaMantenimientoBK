@@ -34,7 +34,7 @@ class DependenciasController{
 
     async listarDependencias(req: Request, res: Response){
         try{
-            const data = await Dependencia.find();
+            const data = await Dependencia.find({relations: {subsede: true}});
             res.status(200).json(data)
         }catch(err){
             if(err instanceof Error)
