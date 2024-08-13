@@ -20,7 +20,6 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sedeModel_1 = require("../models/sedeModel");
 const class_validator_1 = require("class-validator");
 const dependenciaModel_1 = require("../models/dependenciaModel");
 class DependenciasController {
@@ -39,7 +38,7 @@ class DependenciasController {
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });
                 }
-                const registro = yield sedeModel_1.Sede.save(dependencia);
+                const registro = yield dependenciaModel_1.Dependencia.save(dependencia);
                 res.status(201).json(registro);
             }
             catch (err) {
@@ -73,7 +72,7 @@ class DependenciasController {
                 //Asignamos los nuevos valores a las propiedades de la sede
                 const dependenciaModificada = Object.assign(Object.assign({}, dependencia), otherFields);
                 //Guardamos los cambios en la base de datos
-                yield sedeModel_1.Sede.save(dependencia);
+                yield dependenciaModel_1.Dependencia.save(dependencia);
                 const registroActualizado = yield dependenciaModel_1.Dependencia.findOne({
                     where: { idDependencia: Number(idDependencia) }
                 });

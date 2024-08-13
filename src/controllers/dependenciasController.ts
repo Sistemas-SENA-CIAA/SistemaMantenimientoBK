@@ -62,7 +62,7 @@ class DependenciasController{
                   
     
             //Guardamos los cambios en la base de datos
-            await Sede.save(dependencia);
+            await Dependencia.save(dependencia);
     
             const registroActualizado = await Dependencia.findOne({
                 where: { idDependencia: Number(idDependencia) }
