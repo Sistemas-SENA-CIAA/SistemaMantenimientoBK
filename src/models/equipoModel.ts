@@ -5,7 +5,8 @@ import { CuentaDante } from "./cuentaDanteModel";
 import { Estado } from "./estadoModel";
 import { Chequeo } from "./chequeoModel";
 import { Mantenimiento } from "./mantenimientoModel";
-import { Area } from "./areaModel";
+import { Sede } from "./sedeModel";
+import { Subsede } from "./subsedeModel";
 import { ChequeoMantenimiento } from "./ChequeoMantenimiento";
 
 @Entity('equipos')
@@ -49,9 +50,13 @@ export class Equipo extends BaseEntity{
     @OneToMany(() => Chequeo, (chequeo) => chequeo.equipo)
     chequeos: Chequeo[];
 
-    @ManyToOne(() => Area, (area) => area.equipos)
-    @JoinColumn({name: 'area_codigo'})
-    area: Area;
+    @ManyToOne(() => Sede, (sede) => sede.equipos)
+    @JoinColumn({name: 'sede_id'})
+    sede: Sede;
+
+    @ManyToOne(() => Subsede, (subsede) => subsede.equipos)
+    @JoinColumn({name: 'subsede_id'})
+    subsede: Subsede;
 
     @ManyToMany(() => Mantenimiento, mantenimiento => mantenimiento.equipos)
     @JoinTable({

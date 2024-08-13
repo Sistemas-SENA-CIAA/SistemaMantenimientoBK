@@ -11,8 +11,10 @@ import rolesRoutes from './routes/rolesRoutes';
 import usuariosRoutes from './routes/usuariosRoutes';
 import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import estadosRoutes from './routes/estadosRoutes';
-import areasRoutes from './routes/areasRoutes';
+import sedesRoutes from './routes/sedesRoutes';
 import chequeosRoutes from './routes/chequeosRoutes'
+import subsedesRoutes from './routes/subsedesRoutes'
+import dependenciasRoutes from './routes/dependenciasRoutes'
 import { swaggerSpec } from './swaggerConfig';
 import  swaggerUi  from 'swagger-ui-express';
 
@@ -43,7 +45,9 @@ app.use('/roles', rolesRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/mantenimientos', mantenimientosRoutes);
 app.use('/estados', estadosRoutes);
-app.use('/areas', areasRoutes);
+app.use('/sedes', sedesRoutes);
 app.use('/chequeos', chequeosRoutes)
+app.use('/subsedes', subsedesRoutes)
+app.use('/dependencias', dependenciasRoutes)
 
 export default app;

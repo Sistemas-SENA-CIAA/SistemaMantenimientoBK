@@ -13,7 +13,7 @@ class EquiposController{
     //Agregar equipo
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, area, mantenimientos, chequeosMantenimiento } = req.body;
+            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, mantenimientos, chequeosMantenimiento } = req.body;
 
             //Verificamos que no exista un equipo con el mismo serial
             const equipoExistente = await Equipo.findOneBy({serial: serial});
@@ -37,7 +37,8 @@ class EquiposController{
             equipo.tipoEquipo = tipoEquipo;
             equipo.estado = estado;
             equipo.chequeos = chequeos;
-            equipo.area = area;
+            equipo.sede = sede;
+            equipo.subsede = subsede;
             equipo.mantenimientos = mantenimientos;
             equipo.chequeosMantenimiento = chequeosMantenimiento;
 
@@ -58,7 +59,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, area: true, chequeos: true, mantenimientos: true}});
+            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, subsede: true, chequeos: true, mantenimientos: true}});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
@@ -72,7 +73,7 @@ class EquiposController{
         try {
             const registro = await Equipo.findOne({where: {
                 serial: serial}, 
-                relations: {cuentaDante: true, tipoEquipo: true, area: true}
+                relations: {cuentaDante: true, tipoEquipo: true, subsede: true}
             });
     
             if(!registro){

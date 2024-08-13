@@ -7,9 +7,10 @@ import { Usuario } from "../models/usuarioModel";
 import { Rol } from "../models/rolModel";
 import { Estado } from "../models/estadoModel";
 import { Chequeo } from "../models/chequeoModel";
-import { Area } from "../models/areaModel";
+import { Sede } from "../models/sedeModel";
 import { ChequeoMantenimiento } from "../models/ChequeoMantenimiento";
-
+import { Subsede } from "../models/subsedeModel";
+import { Dependencia } from "../models/dependenciaModel";
 import { config } from "dotenv";
 config();
 
@@ -21,8 +22,8 @@ export const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     logging: true,
-    entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Area, ChequeoMantenimiento],
-    synchronize: false
+    entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Sede, Subsede, Dependencia, ChequeoMantenimiento],
+    synchronize: true
 })
 
 AppDataSource.initialize()
