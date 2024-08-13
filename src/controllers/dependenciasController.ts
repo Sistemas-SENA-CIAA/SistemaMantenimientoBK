@@ -24,7 +24,7 @@ class DependenciasController{
               return res.status(400).json({ errors });
             }
 
-            const registro = await Sede.save(dependencia);
+            const registro = await Dependencia.save(dependencia);
             res.status(201).json(registro);
         }catch(err){
             if(err instanceof Error)
