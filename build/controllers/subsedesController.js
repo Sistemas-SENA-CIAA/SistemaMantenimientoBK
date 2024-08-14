@@ -50,7 +50,7 @@ class SubsedeController {
     listarSubsedes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield subsedeModel_1.Subsede.find({ relations: { sede: true, equipos: true } });
+                const data = yield subsedeModel_1.Subsede.find({ relations: { sede: true, equipos: true, dependencias: true } });
                 res.status(200).json(data);
             }
             catch (err) {
