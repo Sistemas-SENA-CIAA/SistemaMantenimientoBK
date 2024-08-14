@@ -51,7 +51,7 @@ class MantenimientosController {
     listarMantenimientos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield mantenimientoModel_1.Mantenimiento.find({ relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area'] });
+                const data = yield mantenimientoModel_1.Mantenimiento.find({ relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede'] });
                 res.status(200).json(data);
             }
             catch (err) {

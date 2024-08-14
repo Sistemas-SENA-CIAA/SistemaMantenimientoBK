@@ -33,7 +33,7 @@ class SubsedeController{
 
     async listarSubsedes(req: Request, res: Response){
         try{
-            const data = await Subsede.find();
+            const data = await Subsede.find({ relations: {sede: true, equipos: true} });
             res.status(200).json(data)
         }catch(err){
             if(err instanceof Error)

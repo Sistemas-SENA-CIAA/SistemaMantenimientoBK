@@ -44,7 +44,7 @@ class MantenimientosController{
 
     async listarMantenimientos(req: Request, res: Response){
         try{
-            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area' ]});
+            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
             res.status(200).json(data);
         }catch(err){
             if(err instanceof Error)
