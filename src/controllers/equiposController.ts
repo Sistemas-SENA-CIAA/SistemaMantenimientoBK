@@ -59,7 +59,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: {cuentaDante: true, tipoEquipo: true, estado: true, subsede: true, chequeos: true, mantenimientos: true}});
+            const data = await Equipo.find({relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'chequeos']});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)
