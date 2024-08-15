@@ -8,6 +8,7 @@ import { Mantenimiento } from "./mantenimientoModel";
 import { Sede } from "./sedeModel";
 import { Subsede } from "./subsedeModel";
 import { ChequeoMantenimiento } from "./ChequeoMantenimiento";
+import { Dependencia } from "./dependenciaModel";
 
 @Entity('equipos')
 export class Equipo extends BaseEntity{
@@ -57,6 +58,10 @@ export class Equipo extends BaseEntity{
     @ManyToOne(() => Subsede, (subsede) => subsede.equipos)
     @JoinColumn({name: 'subsede_id'})
     subsede: Subsede;
+
+    @ManyToOne(() => Dependencia, (dependencia) => dependencia.equipos)
+    @JoinColumn({ name: 'dependencia_id' })
+    dependencia: Dependencia;
 
     @ManyToMany(() => Mantenimiento, mantenimiento => mantenimiento.equipos)
     @JoinTable({

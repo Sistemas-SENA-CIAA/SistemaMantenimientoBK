@@ -13,6 +13,7 @@ exports.Dependencia = void 0;
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 const subsedeModel_1 = require("./subsedeModel");
+const equipoModel_1 = require("./equipoModel");
 let Dependencia = class Dependencia extends typeorm_1.BaseEntity {
 };
 exports.Dependencia = Dependencia;
@@ -35,6 +36,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'id_subsede' }),
     __metadata("design:type", subsedeModel_1.Subsede)
 ], Dependencia.prototype, "subsede", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => equipoModel_1.Equipo, (equipo) => equipo.dependencia),
+    __metadata("design:type", Array)
+], Dependencia.prototype, "equipos", void 0);
 exports.Dependencia = Dependencia = __decorate([
     (0, typeorm_1.Entity)('dependencias')
 ], Dependencia);

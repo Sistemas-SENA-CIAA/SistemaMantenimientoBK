@@ -13,5 +13,5 @@ router.get('/:idMantenimiento/equipos', authMiddleware_1.default, (0, rolValidat
 router.post('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController_1.default.agregarMantenimiento);
 router.post('/asociaEquipos', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController_1.default.asociarEquipos);
 router.route("/:idMantenimiento")
-    .put(authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController_1.default.modificarMantenimiento);
+    .put(authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController_1.default.modificarInfoMantenimiento);
 exports.default = router;

@@ -3,7 +3,7 @@ import { Usuario } from "../models/usuarioModel";
 import { Mantenimiento } from "../models/mantenimientoModel";
 import { AppDataSource } from "../database/conexion";
 import { Equipo } from "../models/equipoModel";
-import { In } from "typeorm";
+import { DeepPartial, In } from "typeorm";
 import { validate } from "class-validator";
 
 class MantenimientosController{
@@ -52,21 +52,36 @@ class MantenimientosController{
         }
     }
 
-    async modificarMantenimiento(req: Request, res: Response){
+    async modificarInfoMantenimiento(req: Request, res: Response) {
         const { idMantenimiento } = req.params;
-        try{
-            const data = await Mantenimiento.findOneBy({idMantenimiento: Number(idMantenimiento)});
-            if(!data){
-                throw new Error('Mantenimiento no encontrado')
+        const { usuario, equipos, chequeos, chequeosMantenimiento, ...otherFields } = req.body;
+
+        try {
+            const mantenimiento = await Mantenimiento.findOne({where: {idMantenimiento: Number(idMantenimiento)}, relations: ['usuario', 'chequeos']});
+
+            if(!mantenimiento){
+                throw new Error('Mantenimiento no encontrado');
             }
 
-            await Mantenimiento.update({idMantenimiento: Number(idMantenimiento)}, req.body);
-            const registroActualizado = await Mantenimiento.findOne({where: {idMantenimiento: Number(idMantenimiento)}, relations: {usuario: true}});
+            const mantenimientoModificado: DeepPartial<Mantenimiento> = {
+                ...mantenimiento,
+                ...otherFields,
+                usuario,
+                equipos,
+                chequeos,
+                chequeosMantenimiento
+            };
+
+            await Mantenimiento.save(mantenimientoModificado);
+
+            const registroActualizado = await Mantenimiento.findOne({where: { idMantenimiento: Number(idMantenimiento) }, relations: ['usuario']
+            });
 
             res.status(200).json(registroActualizado);
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+        } catch (err) {
+            if(err instanceof Error) {
+                res.status(500)
+            }
         }
     }
 

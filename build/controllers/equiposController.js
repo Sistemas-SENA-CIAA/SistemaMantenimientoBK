@@ -30,7 +30,7 @@ class EquiposController {
     agregarEquipo(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, mantenimientos, chequeosMantenimiento } = req.body;
+                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, mantenimientos, chequeosMantenimiento } = req.body;
                 //Verificamos que no exista un equipo con el mismo serial
                 const equipoExistente = yield equipoModel_1.Equipo.findOneBy({ serial: serial });
                 if (equipoExistente) {
@@ -39,7 +39,7 @@ class EquiposController {
                 //Verificamos que el propietario si exista en la BD
                 const cuentaDanteRegistro = yield cuentaDanteModel_1.CuentaDante.findOneBy({ documento: cuentaDante });
                 if (!cuentaDanteRegistro) {
-                    throw new Error('Propietario no encontrado');
+                    throw new Error('Cuentadante no encontrado');
                 }
                 const equipo = new equipoModel_1.Equipo();
                 equipo.serial = serial;
@@ -53,6 +53,7 @@ class EquiposController {
                 equipo.chequeos = chequeos;
                 equipo.sede = sede;
                 equipo.subsede = subsede;
+                equipo.dependencia = dependencia;
                 equipo.mantenimientos = mantenimientos;
                 equipo.chequeosMantenimiento = chequeosMantenimiento;
                 const errors = yield (0, class_validator_1.validate)(equipo);

@@ -13,7 +13,7 @@ class EquiposController{
     //Agregar equipo
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, mantenimientos, chequeosMantenimiento } = req.body;
+            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, mantenimientos, chequeosMantenimiento } = req.body;
 
             //Verificamos que no exista un equipo con el mismo serial
             const equipoExistente = await Equipo.findOneBy({serial: serial});
@@ -24,7 +24,7 @@ class EquiposController{
             //Verificamos que el propietario si exista en la BD
             const  cuentaDanteRegistro = await CuentaDante.findOneBy({documento: cuentaDante});
             if(!cuentaDanteRegistro){
-                throw new Error ('Propietario no encontrado')
+                throw new Error ('Cuentadante no encontrado')
             }
 
             const equipo = new Equipo();
@@ -39,6 +39,7 @@ class EquiposController{
             equipo.chequeos = chequeos;
             equipo.sede = sede;
             equipo.subsede = subsede;
+            equipo.dependencia = dependencia;
             equipo.mantenimientos = mantenimientos;
             equipo.chequeosMantenimiento = chequeosMantenimiento;
 

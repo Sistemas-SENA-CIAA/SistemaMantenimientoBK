@@ -1,6 +1,7 @@
 import { Length } from "class-validator";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Subsede } from "./subsedeModel";
+import { Equipo } from "./equipoModel";
 
 
 @Entity('dependencias')
@@ -19,4 +20,7 @@ export class Dependencia extends BaseEntity{
     @ManyToOne(() => Subsede, (subsede) => subsede.dependencias)
     @JoinColumn({name: 'id_subsede'})
     subsede: Subsede;
+
+    @OneToMany(() => Equipo, (equipo) => equipo.dependencia)
+    equipos: Equipo[];
 }
