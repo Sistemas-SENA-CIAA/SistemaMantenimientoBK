@@ -25,29 +25,29 @@ const swaggerDefinition : OAS3Definition = {
             },
             properties: {
                 documento: {
-                    type: "integer"
+                    type: "integer",
                 },
                 nombre: {
-                    type: "string"
+                    type: "string",
                 },
                 fecha_inicio: {
-                    type: "date"
+                    type: "date",
                 },
                 fecha_fin: {
-                    type: "date"
+                    type: "date",
                 },
                 observaciones: {
-                    type: "string"
+                    type: "string",
                 },
                 correo: {
-                    type: "string"
+                    type: "string",
                 },
                 contrasenia: {
-                    type: "string"
+                    type: "string",
                 },
             },
-        }
-    }
+        },
+    },
 };
 
 const swaggerOptions: OAS3Options = {
