@@ -146,7 +146,7 @@ class MantenimientosController{
         try {
           const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
             where: { idMantenimiento: parseInt(idMantenimiento) },
-            relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.area', 'equipos.chequeos.mantenimiento', 'equipos.mantenimientos' ],
+            relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'equipos.chequeos.mantenimiento', 'equipos.mantenimientos' ],
           });
       
           if (!mantenimiento) {
