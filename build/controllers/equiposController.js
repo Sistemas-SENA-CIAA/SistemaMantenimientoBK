@@ -26,7 +26,29 @@ const class_validator_1 = require("class-validator");
 class EquiposController {
     constructor() {
     }
-    //Agregar equipo
+    /**
+     *  post track
+     * @openapi
+     * /equipos:
+     *      post:
+     *          tags:
+     *               - usuarios
+     *          sumary: "Registrar equipos"
+     *          description: Registro de equipos
+     *          requestBody:
+     *                  content:
+     *                      application/json:
+     *                          shcema:
+     *                              $ref: "#/components/schemas/equipo"
+     *          responses:
+     *              '201':
+     *                  descripcion: Equipo creado correctamente
+     *              '401':
+     *                  descripcion: No tiene permiso para acceder a esta ruta
+     *             security:
+     *               - bearerAuth: [ ]
+    
+     */
     agregarEquipo(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

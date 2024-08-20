@@ -10,7 +10,30 @@ class EquiposController{
     constructor(){
     }
 
-    //Agregar equipo
+    
+/**
+ *  post track
+ * @openapi
+ * /equipos:
+ *      post:
+ *          tags:
+ *               - usuarios
+ *          sumary: "Registrar equipos"
+ *          description: Registro de equipos
+ *          requestBody:
+ *                  content:
+ *                      application/json:
+ *                          shcema:
+ *                              $ref: "#/components/schemas/equipo"
+ *          responses:
+ *              '201':
+ *                  descripcion: Equipo creado correctamente
+ *              '401':
+ *                  descripcion: No tiene permiso para acceder a esta ruta
+ *             security: 
+ *               - bearerAuth: [ ]
+
+ */
     async agregarEquipo(req: Request, res: Response){
         try {
             const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, mantenimientos, chequeosMantenimiento } = req.body;

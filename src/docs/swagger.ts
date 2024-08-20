@@ -15,13 +15,13 @@ const swaggerDefinition : OAS3Definition = {
         securitySchemes: {
             bearerAuth: {
                 type: "https",
-                scheme: "bearer"
+                scheme: "bearer",
             },
         },
         schemas: {
             equipo: {
                 type: "object",
-                required: ["documento", "nombre", "fecha_inicio", "fecha_fin", "observaciones", "correo", "contrasenia"]
+                required: ["documento", "nombre", "fecha_inicio", "fecha_fin", "observaciones", "correo", "contrasenia"],
             },
             properties: {
                 documento: {
