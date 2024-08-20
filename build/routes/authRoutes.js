@@ -9,7 +9,7 @@ const stateValidatorMiddleware_1 = __importDefault(require("../middlewares/state
 const router = express_1.default.Router();
 router.post('/registro', authController_1.default.registrarUsuario);
 /**
- *  POST
+ *  post track
  * @openapi
  * /auth/login:
  *      post:
@@ -20,15 +20,15 @@ router.post('/registro', authController_1.default.registrarUsuario);
  *          requestBody:
  *                  content:
  *                      application/json:
- *                          shema:
- *                              $ref: "#/components/shemas/equipo"
+ *                          shcema:
+ *                              $ref: "#/components/schemas/equipo"
  *          responses:
  *              '201':
  *                  descripcion: Equipo creado correctamente
  *              '401':
  *                  descripcion: No tiene permiso para acceder a esta ruta
  *             security:
- *               - beareaeAuth: [ ]
+ *               - bearerAuth: [ ]
 
  */
 router.post('/login', (0, stateValidatorMiddleware_1.default)(true), authController_1.default.loginUsuario);
