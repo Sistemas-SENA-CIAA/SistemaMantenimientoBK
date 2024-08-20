@@ -12,7 +12,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: "http://localhost:3000",
+            url: "sistemamantenimiento-production.up.railway.app",
         },
     ],
     components: {
@@ -25,24 +25,12 @@ const swaggerDefinition = {
         schemas: {
             user: {
                 type: "object",
-                required: ["name", "album", "cover", "artist", "duration", "mediaId"],
+                required: ["correo", "contrasenia"],
                 properties: {
-                    name: {
+                    correo: {
                         type: "string",
                     },
-                    email: {
-                        type: "string",
-                    },
-                },
-            },
-            item: {
-                type: "object",
-                required: ["price", "qty"],
-                properties: {
-                    price: {
-                        type: "string",
-                    },
-                    qty: {
+                    contrasenia: {
                         type: "string",
                     },
                 },
@@ -52,6 +40,6 @@ const swaggerDefinition = {
 };
 const swaggerOptions = {
     swaggerDefinition,
-    apis: ["./routes/*.ts"],
+    apis: ["../routes/*.ts"],
 };
 exports.default = (0, swagger_jsdoc_1.default)(swaggerOptions);

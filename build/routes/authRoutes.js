@@ -15,8 +15,8 @@ router.post('/registro', authController_1.default.registrarUsuario);
  *    post:
  *      tags:
  *        - users
- *      summary: "Listar usuario"
- *      description: Este endpoint es para listar los usuario totales
+ *      summary: "Login Uusarios"
+ *      description: Este endpoint es para realizar el proceso de login y obtención de Token JWT
  *      requestBody:
  *          content:
  *            application/json:
@@ -24,9 +24,7 @@ router.post('/registro', authController_1.default.registrarUsuario);
  *                $ref: "#/components/schemas/user"
  *      responses:
  *        '200':
- *          description: Retorna el objeto insertado en la coleccion.
- *        '422':
- *          description: Error de validacion.
+ *          description: Inicio de sesión exitoso.
  *      security:
  *       - bearerAuth: []
  */

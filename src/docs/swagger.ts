@@ -8,7 +8,7 @@ const swaggerDefinition: OAS3Definition = {
   },
   servers: [
     {
-      url: "http://localhost:3000",
+      url: "sistemamantenimiento-production.up.railway.app",
     },
   ],
   components: {
@@ -21,24 +21,12 @@ const swaggerDefinition: OAS3Definition = {
     schemas: {
       user: {
         type: "object",
-        required: ["name", "album", "cover", "artist", "duration", "mediaId"],
+        required: ["correo", "contrasenia"],
         properties: {
-          name: {
+          correo: {
             type: "string",
           },
-          email: {
-            type: "string",
-          },
-        },
-      },
-      item: {
-        type: "object",
-        required: ["price", "qty"],
-        properties: {
-          price: {
-            type: "string",
-          },
-          qty: {
+          contrasenia: {
             type: "string",
           },
         },
@@ -49,7 +37,7 @@ const swaggerDefinition: OAS3Definition = {
 
 const swaggerOptions: OAS3Options = {
   swaggerDefinition,
-  apis: ["./routes/*.ts"],
+  apis: ["../routes/*.ts"],
 };
 
 export default swaggerJSDoc(swaggerOptions);
