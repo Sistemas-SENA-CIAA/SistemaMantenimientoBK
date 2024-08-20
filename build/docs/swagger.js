@@ -7,47 +7,44 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swaggerDefinition = {
     openapi: "3.0.0",
     info: {
-        title: "Documentación API Sistema Gestión Mantenimiento e Inventario",
-        version: "1.0"
+        title: "Documentacion de mi API",
+        version: "1.0.0",
     },
     servers: [
         {
-            url: "https://sistemamantenimiento-production.up.railway.app/"
-        }
+            url: "http://localhost:3000",
+        },
     ],
     components: {
         securitySchemes: {
             bearerAuth: {
-                type: "https",
+                type: "http",
                 scheme: "bearer",
             },
         },
         schemas: {
-            equipo: {
+            user: {
                 type: "object",
-                required: ["documento", "nombre", "fecha_inicio", "fecha_fin", "observaciones", "correo", "contrasenia"],
+                required: ["name", "album", "cover", "artist", "duration", "mediaId"],
+                properties: {
+                    name: {
+                        type: "string",
+                    },
+                    email: {
+                        type: "string",
+                    },
+                },
             },
-            properties: {
-                documento: {
-                    type: "integer",
-                },
-                nombre: {
-                    type: "string",
-                },
-                fecha_inicio: {
-                    type: "date",
-                },
-                fecha_fin: {
-                    type: "date",
-                },
-                observaciones: {
-                    type: "string",
-                },
-                correo: {
-                    type: "string",
-                },
-                contrasenia: {
-                    type: "string",
+            item: {
+                type: "object",
+                required: ["price", "qty"],
+                properties: {
+                    price: {
+                        type: "string",
+                    },
+                    qty: {
+                        type: "string",
+                    },
                 },
             },
         },

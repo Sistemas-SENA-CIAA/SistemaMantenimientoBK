@@ -8,6 +8,28 @@ const authController_1 = __importDefault(require("../controllers/authController"
 const stateValidatorMiddleware_1 = __importDefault(require("../middlewares/stateValidatorMiddleware"));
 const router = express_1.default.Router();
 router.post('/registro', authController_1.default.registrarUsuario);
+/**
+ * Post track
+ * @openapi
+ * /users:
+ *    post:
+ *      tags:
+ *        - users
+ *      summary: "Listar usuario"
+ *      description: Este endpoint es para listar los usuario totales
+ *      requestBody:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#/components/schemas/user"
+ *      responses:
+ *        '200':
+ *          description: Retorna el objeto insertado en la coleccion.
+ *        '422':
+ *          description: Error de validacion.
+ *      security:
+ *       - bearerAuth: []
+ */
 router.post('/login', (0, stateValidatorMiddleware_1.default)(true), authController_1.default.loginUsuario);
 router.get('/ruta-protegida', authController_1.default.saludar);
 exports.default = router;
