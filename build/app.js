@@ -19,10 +19,10 @@ const sedesRoutes_1 = __importDefault(require("./routes/sedesRoutes"));
 const chequeosRoutes_1 = __importDefault(require("./routes/chequeosRoutes"));
 const subsedesRoutes_1 = __importDefault(require("./routes/subsedesRoutes"));
 const dependenciasRoutes_1 = __importDefault(require("./routes/dependenciasRoutes"));
-const swaggerConfig_1 = require("./swaggerConfig");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = __importDefault(require("./docs/swagger"));
 const app = (0, express_1.default)();
-app.use('/swagger-ui.html', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerConfig_1.swaggerSpec));
+app.use("/documentacion", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 // parse application/x-www-form-urlencoded
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // parse application/json

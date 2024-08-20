@@ -15,13 +15,12 @@ import sedesRoutes from './routes/sedesRoutes';
 import chequeosRoutes from './routes/chequeosRoutes'
 import subsedesRoutes from './routes/subsedesRoutes'
 import dependenciasRoutes from './routes/dependenciasRoutes'
-import { swaggerSpec } from './swaggerConfig';
 import  swaggerUi  from 'swagger-ui-express';
+import swaggerSetup from "./docs/swagger"
 
 const app = express();
 
-app.use('/swagger-ui.html', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use("/documentacion", swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
