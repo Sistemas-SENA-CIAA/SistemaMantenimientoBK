@@ -33,7 +33,7 @@ class AmbientesController{
     //Método para listar ambientes
     async listarAmbientes(req: Request, res: Response){
         try{
-            const data = Ambiente.find({ relations: {dependencia: true, equipos: true} })
+            const data = await Ambiente.find({ relations: {dependencia: true, equipos: true} })
             res.status(200).json(data)
         }catch(err){
             if(err instanceof Error)

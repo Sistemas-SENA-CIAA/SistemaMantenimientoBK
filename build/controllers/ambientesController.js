@@ -50,7 +50,7 @@ class AmbientesController {
     listarAmbientes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = ambienteModel_1.Ambiente.find({ relations: { dependencia: true, equipos: true } });
+                const data = yield ambienteModel_1.Ambiente.find({ relations: { dependencia: true, equipos: true } });
                 res.status(200).json(data);
             }
             catch (err) {
