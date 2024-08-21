@@ -20,24 +20,24 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const ambienteModel_1 = require("../models/ambienteModel");
 const class_validator_1 = require("class-validator");
-const dependenciaModel_1 = require("../models/dependenciaModel");
-class DependenciasController {
+class AmbientesController {
     constructor() {
     }
-    //Método para agregar dependencias
-    agregarDependencia(req, res) {
+    //Método para agregar Ambientes
+    agregarAmbiente(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { nombre, subsede } = req.body;
-                const dependencia = new dependenciaModel_1.Dependencia();
-                dependencia.nombre = nombre;
-                dependencia.subsede = subsede;
+                const { nombre, dependencia } = req.body;
+                const ambiente = new ambienteModel_1.Ambiente();
+                ambiente.nombre = nombre;
+                ambiente.dependencia = dependencia;
                 const errors = yield (0, class_validator_1.validate)(dependencia);
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });
                 }
-                const registro = yield dependenciaModel_1.Dependencia.save(dependencia);
+                const registro = ambienteModel_1.Ambiente.save(ambiente);
                 res.status(201).json(registro);
             }
             catch (err) {
@@ -46,10 +46,11 @@ class DependenciasController {
             }
         });
     }
-    listarDependencias(req, res) {
+    //Método para listar ambientes
+    listarAmbientes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield dependenciaModel_1.Dependencia.find({ relations: { subsede: true } });
+                const data = ambienteModel_1.Ambiente.find({ relations: { dependencia: true, equipos: true } });
                 res.status(200).json(data);
             }
             catch (err) {
@@ -58,22 +59,22 @@ class DependenciasController {
             }
         });
     }
-    //Método para actualizar Dependencias
-    modificarDependencias(req, res) {
+    //Método para actualizar Ambientes
+    modificarAmbientes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idDependencia } = req.params;
+            const { idAmbiente } = req.params;
             const otherFields = __rest(req.body, []);
             try {
-                const dependencia = yield dependenciaModel_1.Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
-                if (!dependencia) {
-                    throw new Error('Dependencia no encontrada');
+                const ambiente = yield ambienteModel_1.Ambiente.findOne({ where: { idAmbiente: Number(idAmbiente) } });
+                if (!ambiente) {
+                    throw new Error('Ambiente no encontrado');
                 }
                 //Asignamos los nuevos valores a las propiedades de la sede
-                const dependenciaModificada = Object.assign(Object.assign({}, dependencia), otherFields);
+                const ambienteModificado = Object.assign(Object.assign({}, ambiente), otherFields);
                 //Guardamos los cambios en la base de datos
-                yield dependenciaModel_1.Dependencia.save(dependenciaModificada);
-                const registroActualizado = yield dependenciaModel_1.Dependencia.findOne({
-                    where: { idDependencia: Number(idDependencia) }
+                yield ambienteModel_1.Ambiente.save(ambienteModificado);
+                const registroActualizado = yield ambienteModel_1.Ambiente.findOne({
+                    where: { idAmbiente: Number(idAmbiente) }
                 });
                 res.status(200).json(registroActualizado);
             }
@@ -85,4 +86,4 @@ class DependenciasController {
         });
     }
 }
-exports.default = new DependenciasController();
+exports.default = new AmbientesController();

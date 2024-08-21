@@ -12,11 +12,10 @@ class DependenciasController{
     //Método para agregar dependencias
     async agregarDependencia(req: Request, res: Response){
         try{
-            const { nombre, ambiente, subsede } = req.body;
+            const { nombre, subsede } = req.body;
 
             const dependencia = new Dependencia();
             dependencia.nombre = nombre;
-            dependencia.ambiente = ambiente;
             dependencia.subsede = subsede;
             
             const errors = await validate(dependencia);
@@ -62,7 +61,7 @@ class DependenciasController{
                   
     
             //Guardamos los cambios en la base de datos
-            await Dependencia.save(dependencia);
+            await Dependencia.save(dependenciaModificada);
     
             const registroActualizado = await Dependencia.findOne({
                 where: { idDependencia: Number(idDependencia) }

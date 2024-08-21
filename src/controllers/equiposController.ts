@@ -10,33 +10,9 @@ class EquiposController{
     constructor(){
     }
 
-    
-/**
- *  post track
- * @openapi
- * /equipos:
- *      post:
- *          tags:
- *               - usuarios
- *          sumary: "Registrar equipos"
- *          description: Registro de equipos
- *          requestBody:
- *                  content:
- *                      application/json:
- *                          shcema:
- *                              $ref: "#/components/schemas/equipo"
- *          responses:
- *              '201':
- *                  descripcion: Equipo creado correctamente
- *              '401':
- *                  descripcion: No tiene permiso para acceder a esta ruta
- *             security: 
- *               - bearerAuth: [ ]
-
- */
     async agregarEquipo(req: Request, res: Response){
         try {
-            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, mantenimientos, chequeosMantenimiento } = req.body;
+            const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, ambiente, mantenimientos, chequeosMantenimiento } = req.body;
 
             //Verificamos que no exista un equipo con el mismo serial
             const equipoExistente = await Equipo.findOneBy({serial: serial});
@@ -63,6 +39,7 @@ class EquiposController{
             equipo.sede = sede;
             equipo.subsede = subsede;
             equipo.dependencia = dependencia;
+            equipo.ambiente = ambiente;
             equipo.mantenimientos = mantenimientos;
             equipo.chequeosMantenimiento = chequeosMantenimiento;
 
@@ -83,7 +60,7 @@ class EquiposController{
     //Listado de equipos
     async listarEquipos(req: Request, res: Response){
         try {
-            const data = await Equipo.find({relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'dependencia', 'chequeos']});
+            const data = await Equipo.find({relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'dependencia', 'ambiente', 'chequeos']});
             res.status(200).json(data)
         } catch (err) {
             if(err instanceof Error)

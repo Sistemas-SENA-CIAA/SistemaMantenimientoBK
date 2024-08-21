@@ -12,15 +12,12 @@ import usuariosRoutes from './routes/usuariosRoutes';
 import mantenimientosRoutes from './routes/mantenimientosRoutes';
 import estadosRoutes from './routes/estadosRoutes';
 import sedesRoutes from './routes/sedesRoutes';
-import chequeosRoutes from './routes/chequeosRoutes'
-import subsedesRoutes from './routes/subsedesRoutes'
-import dependenciasRoutes from './routes/dependenciasRoutes'
-import  swaggerUi  from 'swagger-ui-express';
-import swaggerSetup from "./docs/swagger"
+import chequeosRoutes from './routes/chequeosRoutes';
+import subsedesRoutes from './routes/subsedesRoutes';
+import dependenciasRoutes from './routes/dependenciasRoutes';
+import ambientesRoutes from './routes/ambientesRoutes';
 
 const app = express();
-
-app.use("/documentacion", swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,8 +42,9 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/mantenimientos', mantenimientosRoutes);
 app.use('/estados', estadosRoutes);
 app.use('/sedes', sedesRoutes);
-app.use('/chequeos', chequeosRoutes)
-app.use('/subsedes', subsedesRoutes)
-app.use('/dependencias', dependenciasRoutes)
+app.use('/chequeos', chequeosRoutes);
+app.use('/subsedes', subsedesRoutes);
+app.use('/dependencias', dependenciasRoutes);
+app.use('/ambientes', ambientesRoutes);
 
 export default app;

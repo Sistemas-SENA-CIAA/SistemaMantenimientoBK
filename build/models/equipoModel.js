@@ -21,6 +21,7 @@ const sedeModel_1 = require("./sedeModel");
 const subsedeModel_1 = require("./subsedeModel");
 const ChequeoMantenimiento_1 = require("./ChequeoMantenimiento");
 const dependenciaModel_1 = require("./dependenciaModel");
+const ambienteModel_1 = require("./ambienteModel");
 let Equipo = class Equipo extends typeorm_1.BaseEntity {
 };
 exports.Equipo = Equipo;
@@ -89,6 +90,11 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'dependencia_id' }),
     __metadata("design:type", dependenciaModel_1.Dependencia)
 ], Equipo.prototype, "dependencia", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => ambienteModel_1.Ambiente, (ambiente) => ambiente.equipos),
+    (0, typeorm_1.JoinColumn)({ name: 'ambiente_id' }),
+    __metadata("design:type", ambienteModel_1.Ambiente)
+], Equipo.prototype, "ambiente", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => mantenimientoModel_1.Mantenimiento, mantenimiento => mantenimiento.equipos),
     (0, typeorm_1.JoinTable)({

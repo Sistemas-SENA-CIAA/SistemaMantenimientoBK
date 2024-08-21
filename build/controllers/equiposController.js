@@ -26,33 +26,10 @@ const class_validator_1 = require("class-validator");
 class EquiposController {
     constructor() {
     }
-    /**
-     *  post track
-     * @openapi
-     * /equipos:
-     *      post:
-     *          tags:
-     *               - usuarios
-     *          sumary: "Registrar equipos"
-     *          description: Registro de equipos
-     *          requestBody:
-     *                  content:
-     *                      application/json:
-     *                          shcema:
-     *                              $ref: "#/components/schemas/equipo"
-     *          responses:
-     *              '201':
-     *                  descripcion: Equipo creado correctamente
-     *              '401':
-     *                  descripcion: No tiene permiso para acceder a esta ruta
-     *             security:
-     *               - bearerAuth: [ ]
-    
-     */
     agregarEquipo(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, mantenimientos, chequeosMantenimiento } = req.body;
+                const { serial, marca, referencia, fechaCompra, placaSena, cuentaDante, tipoEquipo, estado, chequeos, sede, subsede, dependencia, ambiente, mantenimientos, chequeosMantenimiento } = req.body;
                 //Verificamos que no exista un equipo con el mismo serial
                 const equipoExistente = yield equipoModel_1.Equipo.findOneBy({ serial: serial });
                 if (equipoExistente) {
@@ -76,6 +53,7 @@ class EquiposController {
                 equipo.sede = sede;
                 equipo.subsede = subsede;
                 equipo.dependencia = dependencia;
+                equipo.ambiente = ambiente;
                 equipo.mantenimientos = mantenimientos;
                 equipo.chequeosMantenimiento = chequeosMantenimiento;
                 const errors = yield (0, class_validator_1.validate)(equipo);
@@ -96,7 +74,7 @@ class EquiposController {
     listarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield equipoModel_1.Equipo.find({ relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'dependencia', 'chequeos'] });
+                const data = yield equipoModel_1.Equipo.find({ relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'dependencia', 'ambiente', 'chequeos'] });
                 res.status(200).json(data);
             }
             catch (err) {
