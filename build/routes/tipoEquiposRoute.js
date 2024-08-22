@@ -8,7 +8,7 @@ const tipoEquiposController_1 = __importDefault(require("../controllers/tipoEqui
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
 const rolValidatorMiddleware_1 = __importDefault(require("../middlewares/rolValidatorMiddleware"));
 const router = express_1.default.Router();
-router.get('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'USUARIO DE CONSULTA']), tipoEquiposController_1.default.listarTipoEquipos);
+router.get('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO', 'USUARIO DE CONSULTA']), tipoEquiposController_1.default.listarTipoEquipos);
 router.post('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), tipoEquiposController_1.default.agregarTipoEquipo);
 router.put('/:id', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), tipoEquiposController_1.default.modificarTipo);
 exports.default = router;
