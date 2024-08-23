@@ -37,6 +37,6 @@ const generarToken = (usuario) => {
         correo: usuario.correo
     };
     //Firmamos el token 
-    return jwt.sign(usuarioForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return jwt.sign(usuarioForToken, process.env.JWT_SECRET, { expiresIn: '30s' });
 };
 exports.generarToken = generarToken;

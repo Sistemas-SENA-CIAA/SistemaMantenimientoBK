@@ -11,5 +11,5 @@ export const generarToken = (usuario : any ) => {
     }
 
     //Firmamos el token 
-    return jwt.sign(usuarioForToken, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+    return jwt.sign(usuarioForToken, process.env.JWT_SECRET as string, { expiresIn: '30s' });
 }
