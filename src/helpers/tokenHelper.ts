@@ -8,5 +8,5 @@ export const generarToken = (usuario : any ) => {
     }
 
     //Firmamos
-    return jwt.sign(usuarioForToken, 'Token-Auth', { expiresIn: '1h' });
+    return jwt.sign(usuarioForToken, 'Token-Auth', { expiresIn: '30s' });
 }
