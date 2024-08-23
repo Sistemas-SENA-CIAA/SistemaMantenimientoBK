@@ -1,4 +1,7 @@
 import * as jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const generarToken = (usuario : any ) => {
     //Objeto para codificar
@@ -7,6 +10,6 @@ export const generarToken = (usuario : any ) => {
         correo: usuario.correo
     }
 
-    //Firmamos
-    return jwt.sign(usuarioForToken, 'Token-Auth', { expiresIn: '30s' });
+    //Firmamos el token 
+    return jwt.sign(usuarioForToken, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 }

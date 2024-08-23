@@ -22,16 +22,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generarToken = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const generarToken = (usuario) => {
     //Objeto para codificar
     const usuarioForToken = {
         documento: usuario.documento,
         correo: usuario.correo
     };
-    //Firmamos
-    return jwt.sign(usuarioForToken, 'Token-Auth', { expiresIn: '30s' });
+    //Firmamos el token 
+    return jwt.sign(usuarioForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 exports.generarToken = generarToken;
