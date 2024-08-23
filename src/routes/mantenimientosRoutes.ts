@@ -14,6 +14,6 @@ router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO
 router.post('/asociaEquipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.asociarEquipos)
 
 router.route("/:idMantenimiento")
-    .put(verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.modificarInfoMantenimiento)
+    .put(verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.modificarInfoMantenimiento)
 
 export default router

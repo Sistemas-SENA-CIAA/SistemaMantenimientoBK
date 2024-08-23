@@ -16,7 +16,7 @@ export class Dependencia extends BaseEntity{
     
     @ManyToOne(() => Subsede, (subsede) => subsede.dependencias)
     @JoinColumn({name: 'id_subsede'})
-    subsede: Subsede;
+    subsede: Subsede;de
 
     @OneToMany(() => Equipo, (equipo) => equipo.dependencia)
     equipos: Equipo[];

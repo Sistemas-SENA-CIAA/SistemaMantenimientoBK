@@ -74,7 +74,7 @@ class EquiposController {
     listarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield equipoModel_1.Equipo.find({ relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'subsede.dependencias', 'mantenimientos', 'dependencia', 'ambiente', 'chequeos'] });
+                const data = yield equipoModel_1.Equipo.find({ relations: ['cuentaDante', 'tipoEquipo', 'estado', 'subsede', 'equipo.mantenimientos', 'mantenimientos', 'dependencia', 'ambiente', 'chequeos'] });
                 res.status(200).json(data);
             }
             catch (err) {
