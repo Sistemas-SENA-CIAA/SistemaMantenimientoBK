@@ -7,9 +7,10 @@ export const generarToken = (usuario : any ) => {
     //Objeto para codificar
     const usuarioForToken = {
         documento: usuario.documento,
-        correo: usuario.correo
+        correo: usuario.correo,
+        rol: usuario.rol[0]
     }
 
     //Firmamos el token 
-    return jwt.sign(usuarioForToken, process.env.JWT_SECRET as string, { expiresIn: '30s' });
+    return jwt.sign(usuarioForToken, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 }

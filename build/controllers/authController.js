@@ -81,7 +81,7 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             const { correo, contrasenia } = req.body;
             try {
-                const usuario = yield usuarioModel_1.Usuario.findOne({ where: { correo } });
+                const usuario = yield usuarioModel_1.Usuario.findOne({ where: { correo }, relations: { roles: true } });
                 if (!usuario) {
                     return res.status(401).json({ error: 'Usuario o Contraseña incorrectos' });
                 }
@@ -93,6 +93,7 @@ class AuthController {
                 const token = (0, tokenHelper_1.generarToken)(usuario);
                 res.send({
                     correo: usuario.correo,
+                    rol: usuario.roles[0],
                     token
                 });
             }
