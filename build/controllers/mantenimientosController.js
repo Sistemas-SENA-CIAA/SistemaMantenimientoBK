@@ -71,12 +71,12 @@ class MantenimientosController {
     listarMantenimientos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuario = req.user; // Extraer la información del usuario desde el token
-                console.log(usuario); // Para verificar la estructura del usuario
+                const usuario = req.user; //Extraemos la información del usuario desde el token
+                console.log(usuario);
                 let mantenimientos;
-                // Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
+                //Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
                 if (usuario.rol === 'TÉCNICO EN CAMPO') {
-                    // Filtramos los mantenimientos por el correo del usuario que inició sesión
+                    //Filtramos los mantenimientos por el correo del usuario que inició sesión
                     mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({
                         where: { usuario: { correo: usuario.correo } },
                         relations: [

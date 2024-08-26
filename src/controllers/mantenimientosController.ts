@@ -54,14 +54,14 @@ class MantenimientosController{
 
     async listarMantenimientos(req: Request, res: Response) {
         try {
-            const usuario = (req as any).user; // Extraer la información del usuario desde el token
-            console.log(usuario); // Para verificar la estructura del usuario
+            const usuario = (req as any).user; //Extraemos la información del usuario desde el token
+            console.log(usuario);
     
             let mantenimientos;
     
-            // Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
+            //Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
             if (usuario.rol === 'TÉCNICO EN CAMPO') {
-                // Filtramos los mantenimientos por el correo del usuario que inició sesión
+                //Filtramos los mantenimientos por el correo del usuario que inició sesión
                 mantenimientos = await Mantenimiento.find({
                     where: { usuario: { correo: usuario.correo } },
                     relations: [
