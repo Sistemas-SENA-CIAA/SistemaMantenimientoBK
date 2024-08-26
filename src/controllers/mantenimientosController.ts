@@ -62,9 +62,9 @@ class MantenimientosController{
     
             if (usuario.roles[0].nombre === 'TÉCNICO EN CAMPO') {
                 mantenimientos = await Mantenimiento.find({ where: { usuario: usuario.documento }, relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ] });
-            } else {
-                mantenimientos = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
-            }
+            } 
+
+            mantenimientos = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
     
             res.status(200).json(mantenimientos);
         } catch (err) {
