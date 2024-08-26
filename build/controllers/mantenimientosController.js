@@ -71,18 +71,31 @@ class MantenimientosController {
     listarMantenimientos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuario = req.user;
-                console.log(usuario);
-                const mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({
-                    relations: [
-                        'equipos', 'usuario', 'chequeos',
-                        'equipos.cuentaDante', 'equipos.tipoEquipo',
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
-                    ],
-                    where: usuario.roles && usuario.roles[0].nombre === 'TÉCNICO EN CAMPO'
-                        ? { usuario: usuario.documento } // Filtrar por técnico
-                        : {} // No filtrar, obtener todos los mantenimientos
-                });
+                const usuario = req.user; // Extraer la información del usuario desde el token
+                console.log(usuario); // Para verificar la estructura del usuario
+                let mantenimientos;
+                // Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
+                if (usuario.rol === 'TÉCNICO EN CAMPO') {
+                    // Filtramos los mantenimientos por el correo del usuario que inició sesión
+                    mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({
+                        where: { usuario: { correo: usuario.correo } },
+                        relations: [
+                            'equipos', 'usuario', 'chequeos',
+                            'equipos.cuentaDante', 'equipos.tipoEquipo',
+                            'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
+                        ]
+                    });
+                }
+                else {
+                    // Si el usuario no es 'TÉCNICO EN CAMPO', listamos todos los mantenimientos
+                    mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({
+                        relations: [
+                            'equipos', 'usuario', 'chequeos',
+                            'equipos.cuentaDante', 'equipos.tipoEquipo',
+                            'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
+                        ]
+                    });
+                }
                 res.status(200).json(mantenimientos);
             }
             catch (err) {
