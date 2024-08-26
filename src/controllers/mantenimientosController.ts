@@ -42,53 +42,16 @@ class MantenimientosController{
         }
     }
 
-    // async listarMantenimientos(req: Request, res: Response){
-    //     try{
-    //         const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
-    //         res.status(200).json(data);
-    //     }catch(err){
-    //         if(err instanceof Error)
-    //         res.status(500).send(err.message);
-    //     }
-    // }
-
-    async listarMantenimientos(req: Request, res: Response) {
-        try {
-            const usuario = (req as any).user;
-            console.log(usuario);
-    
-            let mantenimientos;
-    
-            // Verificamos si el rol del usuario es 'TÉCNICO EN CAMPO'
-            if (usuario.roles[0].nombre === 'TÉCNICO EN CAMPO') {
-                mantenimientos = await Mantenimiento.find({
-                    where: { usuario: usuario.documento },
-                    relations: [
-                        'equipos', 'usuario', 'chequeos', 
-                        'equipos.cuentaDante', 'equipos.tipoEquipo', 
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
-                    ]
-                });
-            } else {
-                // Si el usuario no es 'TÉCNICO EN CAMPO', listamos todos los mantenimientos
-                mantenimientos = await Mantenimiento.find({
-                    relations: [
-                        'equipos', 'usuario', 'chequeos', 
-                        'equipos.cuentaDante', 'equipos.tipoEquipo', 
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
-                    ]
-                });
-            }
-    
-            res.status(200).json(mantenimientos);
-        } catch (err) {
-            if (err instanceof Error) {
-                res.status(500).send(err.message);
-            }
+    async listarMantenimientos(req: Request, res: Response){
+        try{
+            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
+            res.status(200).json(data);
+        }catch(err){
+            if(err instanceof Error)
+            res.status(500).send(err.message);
         }
     }
-    
-    
+        
 
     async modificarInfoMantenimiento(req: Request, res: Response) {
         const { idMantenimiento } = req.params;
