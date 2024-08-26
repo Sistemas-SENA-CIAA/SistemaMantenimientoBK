@@ -59,15 +59,30 @@ class MantenimientosController {
             }
         });
     }
+    // async listarMantenimientos(req: Request, res: Response){
+    //     try{
+    //         const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
+    //         res.status(200).json(data);
+    //     }catch(err){
+    //         if(err instanceof Error)
+    //         res.status(500).send(err.message);
+    //     }
+    // }
     listarMantenimientos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield mantenimientoModel_1.Mantenimiento.find({ relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede'] });
-                res.status(200).json(data);
+                const usuario = req.user;
+                let mantenimientos;
+                if (usuario.rol === 'TÉCNICO EN CAMPO') {
+                    mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({ where: { usuario: usuario.documento }, relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede'] });
+                }
+                else {
+                    mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({ relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede'] });
+                }
+                res.status(200).json(mantenimientos);
             }
             catch (err) {
-                if (err instanceof Error)
-                    res.status(500).send(err.message);
+                res.status(500).json({ error: 'Error al listar los mantenimientos' });
             }
         });
     }

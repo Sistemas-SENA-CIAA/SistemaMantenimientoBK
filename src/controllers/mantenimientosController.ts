@@ -42,15 +42,34 @@ class MantenimientosController{
         }
     }
 
-    async listarMantenimientos(req: Request, res: Response){
-        try{
-            const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
-            res.status(200).json(data);
-        }catch(err){
-            if(err instanceof Error)
-            res.status(500).send(err.message);
+    // async listarMantenimientos(req: Request, res: Response){
+    //     try{
+    //         const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
+    //         res.status(200).json(data);
+    //     }catch(err){
+    //         if(err instanceof Error)
+    //         res.status(500).send(err.message);
+    //     }
+    // }
+
+    async listarMantenimientos(req: Request, res: Response) {
+        try {
+            const usuario = (req as any).user;
+            
+            let mantenimientos;
+    
+            if (usuario.rol === 'TÉCNICO EN CAMPO') {
+                mantenimientos = await Mantenimiento.find({ where: { usuario: usuario.documento }, relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ] });
+            } else {
+                mantenimientos = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
+            }
+    
+            res.status(200).json(mantenimientos);
+        } catch (err) {
+            res.status(500).json({ error: 'Error al listar los mantenimientos' });
         }
     }
+    
 
     async modificarInfoMantenimiento(req: Request, res: Response) {
         const { idMantenimiento } = req.params;
