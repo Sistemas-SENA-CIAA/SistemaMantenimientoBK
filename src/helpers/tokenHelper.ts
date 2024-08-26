@@ -8,7 +8,7 @@ export const generarToken = (usuario : any ) => {
     const usuarioForToken = {
         documento: usuario.documento,
         correo: usuario.correo,
-        rol: usuario.roles[0]
+        rol: usuario.roles[0].nombre
     }
 
     //Firmamos el token 

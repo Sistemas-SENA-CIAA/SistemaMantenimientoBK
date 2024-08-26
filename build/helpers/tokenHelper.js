@@ -35,7 +35,7 @@ const generarToken = (usuario) => {
     const usuarioForToken = {
         documento: usuario.documento,
         correo: usuario.correo,
-        rol: usuario.roles[0]
+        rol: usuario.roles[0].nombre
     };
     //Firmamos el token 
     return jwt.sign(usuarioForToken, process.env.JWT_SECRET, { expiresIn: '1h' });
