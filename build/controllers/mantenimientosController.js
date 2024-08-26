@@ -72,8 +72,9 @@ class MantenimientosController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const usuario = req.user;
+                console.log(usuario);
                 let mantenimientos;
-                if (usuario.rol.nombre === 'TÉCNICO EN CAMPO') {
+                if (usuario.roles[0].nombre === 'TÉCNICO EN CAMPO') {
                     mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({ where: { usuario: usuario.documento }, relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede'] });
                 }
                 else {
