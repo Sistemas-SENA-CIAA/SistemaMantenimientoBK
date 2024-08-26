@@ -74,7 +74,7 @@ class AuthController{
 
             res.send({
                 correo: usuario.correo,
-                rol: usuario.roles[0],
+                rol: usuario.roles[0].nombre,
                 token
             });
 

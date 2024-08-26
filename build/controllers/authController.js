@@ -93,7 +93,7 @@ class AuthController {
                 const token = (0, tokenHelper_1.generarToken)(usuario);
                 res.send({
                     correo: usuario.correo,
-                    rol: usuario.roles[0],
+                    rol: usuario.roles[0].nombre,
                     token
                 });
             }
