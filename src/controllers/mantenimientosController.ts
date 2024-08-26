@@ -55,6 +55,8 @@ class MantenimientosController{
     async listarMantenimientos(req: Request, res: Response) {
         try {
             const usuario = (req as any).user;
+            console.log(usuario);
+            
             
             let mantenimientos;
     
