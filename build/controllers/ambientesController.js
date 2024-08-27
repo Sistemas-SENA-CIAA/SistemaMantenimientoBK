@@ -33,7 +33,7 @@ class AmbientesController {
                 const ambiente = new ambienteModel_1.Ambiente();
                 ambiente.nombre = nombre;
                 ambiente.dependencia = dependencia;
-                const errors = yield (0, class_validator_1.validate)(dependencia);
+                const errors = yield (0, class_validator_1.validate)(ambiente);
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });
                 }

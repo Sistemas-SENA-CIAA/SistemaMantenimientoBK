@@ -17,7 +17,7 @@ class AmbientesController{
             ambiente.nombre = nombre;
             ambiente.dependencia = dependencia;
 
-            const errors = await validate(dependencia);
+            const errors = await validate(ambiente);
             if (errors.length > 0) {
               return res.status(400).json({ errors });
             }
