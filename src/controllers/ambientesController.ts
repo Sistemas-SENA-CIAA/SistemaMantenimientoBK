@@ -22,7 +22,7 @@ class AmbientesController{
               return res.status(400).json({ errors });
             }
 
-            const registro = Ambiente.save(ambiente);
+            const registro = await Ambiente.save(ambiente);
             res.status(201).json(registro);
         }catch(err){
             if(err instanceof Error)

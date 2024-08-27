@@ -37,7 +37,7 @@ class AmbientesController {
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });
                 }
-                const registro = ambienteModel_1.Ambiente.save(ambiente);
+                const registro = yield ambienteModel_1.Ambiente.save(ambiente);
                 res.status(201).json(registro);
             }
             catch (err) {
