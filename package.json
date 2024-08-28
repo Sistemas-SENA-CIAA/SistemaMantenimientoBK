@@ -18,6 +18,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/xlsx": "^0.0.36",
     "bcrypt": "^5.1.1",
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",
@@ -29,7 +30,8 @@
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -37,12 +39,12 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.14.2",
+    "@types/node": "^20.16.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "pre-commit": "^1.2.2",
     "rimraf": "^6.0.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.4"
   }
 }

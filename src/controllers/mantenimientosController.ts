@@ -5,6 +5,7 @@ import { AppDataSource } from "../database/conexion";
 import { Equipo } from "../models/equipoModel";
 import { DeepPartial, In } from "typeorm";
 import { validate } from "class-validator";
+import xlsx from 'xlsx';
 
 class MantenimientosController{
     constructor(){
@@ -196,6 +197,27 @@ class MantenimientosController{
           console.error('Error al obtener los equipos:', error);
           res.status(500).json({ message: 'Error al obtener los equipos' });
         }      
+    }
+
+    async generarInforme(req: Request, res: Response){
+        try {
+            //Consultamos a la base de datos
+            const data = await Mantenimiento.find();
+        
+            //Convertimos los datos a formato de hoja de cálculo
+            const worksheet = xlsx.utils.json_to_sheet(data);
+            const workbook = xlsx.utils.book_new();
+            xlsx.utils.book_append_sheet(workbook, worksheet, 'Data');
+        
+            //Generamos el archivo Excel
+            xlsx.writeFile(workbook, 'report.xlsx');
+        
+            //Enviamos el archivo al cliente
+            res.download('report.xlsx');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al generar el informe');
+        }
     }
 }
 

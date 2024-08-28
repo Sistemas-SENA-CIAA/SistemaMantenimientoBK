@@ -19,6 +19,9 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const usuarioModel_1 = require("../models/usuarioModel");
 const mantenimientoModel_1 = require("../models/mantenimientoModel");
@@ -26,6 +29,7 @@ const conexion_1 = require("../database/conexion");
 const equipoModel_1 = require("../models/equipoModel");
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
+const xlsx_1 = __importDefault(require("xlsx"));
 class MantenimientosController {
     constructor() {
     }
@@ -197,6 +201,26 @@ class MantenimientosController {
             catch (error) {
                 console.error('Error al obtener los equipos:', error);
                 res.status(500).json({ message: 'Error al obtener los equipos' });
+            }
+        });
+    }
+    generarInforme(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Consultamos a la base de datos
+                const data = yield mantenimientoModel_1.Mantenimiento.find();
+                //Convertimos los datos a formato de hoja de cálculo
+                const worksheet = xlsx_1.default.utils.json_to_sheet(data);
+                const workbook = xlsx_1.default.utils.book_new();
+                xlsx_1.default.utils.book_append_sheet(workbook, worksheet, 'Data');
+                //Generamos el archivo Excel
+                xlsx_1.default.writeFile(workbook, 'report.xlsx');
+                //Enviamos el archivo al cliente
+                res.download('report.xlsx');
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).send('Error al generar el informe');
             }
         });
     }

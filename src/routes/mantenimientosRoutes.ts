@@ -11,7 +11,9 @@ router.get('/:idMantenimiento/equipos', verificarToken, validarRol(['ADMINISTRAD
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.agregarMantenimiento);
 
-router.post('/asociaEquipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.asociarEquipos)
+router.post('/asociaEquipos', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO']), mantenimientosController.asociarEquipos);
+
+router.get('/informe', verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.generarInforme);
 
 router.route("/:idMantenimiento")
     .put(verificarToken, validarRol(['ADMINISTRADOR']), mantenimientosController.modificarInfoMantenimiento)
