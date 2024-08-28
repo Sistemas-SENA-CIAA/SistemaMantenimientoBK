@@ -53,7 +53,7 @@ class DependenciasController{
                 throw new Error('Dependencia no encontrada');
             }
     
-            //Asignamos los nuevos valores a las propiedades de la Dependencia
+            //Asignamos los nuevos valores a las propiedades de la Dependencia con el DeepPartial
             const dependenciaModificada: DeepPartial<Dependencia> = {
                 ...dependencia,
                 ...otherFields 

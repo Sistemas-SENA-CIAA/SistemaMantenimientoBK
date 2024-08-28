@@ -68,7 +68,7 @@ class DependenciasController {
                 if (!dependencia) {
                     throw new Error('Dependencia no encontrada');
                 }
-                //Asignamos los nuevos valores a las propiedades de la sede
+                //Asignamos los nuevos valores a las propiedades de la Dependencia con el DeepPartial
                 const dependenciaModificada = Object.assign(Object.assign({}, dependencia), otherFields);
                 //Guardamos los cambios en la base de datos
                 yield dependenciaModel_1.Dependencia.save(dependenciaModificada);
