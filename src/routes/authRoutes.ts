@@ -6,7 +6,7 @@ import validarEstado from '../middlewares/stateValidatorMiddleware';
 
 const router = express.Router();
 
-router.post('/registro', authController.registrarUsuario);
+router.post('/registro', verificarToken, validarRol(['ADMINISTRADOR']), authController.registrarUsuario);
 
 router.post('/login', validarEstado(true), authController.loginUsuario);
 

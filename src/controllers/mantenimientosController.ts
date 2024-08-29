@@ -43,15 +43,6 @@ class MantenimientosController{
         }
     }
 
-    // async listarMantenimientos(req: Request, res: Response){
-    //     try{
-    //         const data = await Mantenimiento.find({relations: ['equipos', 'usuario', 'chequeos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede' ]});
-    //         res.status(200).json(data);
-    //     }catch(err){
-    //         if(err instanceof Error)
-    //         res.status(500).send(err.message);
-    //     }
-    // }
 
     async listarMantenimientos(req: Request, res: Response) {
         try {
@@ -219,6 +210,62 @@ class MantenimientosController{
             res.status(500).send('Error al generar el informe');
         }
     }
+
+    async generarInformeEspecifico(req: Request, res: Response) {
+        const { idMantenimiento } = req.params;
+      
+        try {
+          const mantenimiento = await Mantenimiento.findOne({
+            where: { idMantenimiento: Number(idMantenimiento) },
+            relations: { equipos: true },
+          });
+      
+          if (!mantenimiento) {
+            return res.status(404).send('Mantenimiento no encontrado');
+          }
+      
+          // Función auxiliar para aplanar los datos (si es necesario)
+          function aplanarDatos(data: Mantenimiento) {
+            const datosAplanados: any[] = []; // Ajusta el tipo según tus necesidades
+            // Lógica para aplanar los datos, por ejemplo:
+            datosAplanados.push({
+              // Propiedades del mantenimiento
+              idMantenimiento: data.idMantenimiento,
+              objetivo: data.objetivo,
+              // ...
+            });
+            data.equipos.forEach(equipo => {
+              datosAplanados.push({
+                // Propiedades del equipo
+                serial: equipo.serial,
+                // ...
+              });
+            });
+            return datosAplanados;
+          }
+      
+          const datosAplanados = aplanarDatos(mantenimiento);
+      
+          //Crear la hoja de cálculo con las columnas deseadas
+          const worksheet = xlsx.utils.json_to_sheet(datosAplanados, {
+            skipHeader: true,
+          });
+          //Agregar encabezados personalizados
+          const headers = ['ID Mantenimiento', 'Fecha', 'Nombre Equipo', '...'];
+          worksheet['!ref'] = `A1:${String.fromCharCode(65 + headers.length - 1)}${datosAplanados.length + 1}`;
+          worksheet['1'] = headers;
+      
+          //Resto del código para generar el archivo Excel
+          const workbook = xlsx.utils.book_new();
+          xlsx.utils.book_append_sheet(workbook, worksheet, 'Data');
+          xlsx.writeFile(workbook, 'report.xlsx');
+          res.download('report.xlsx');
+        } catch (err) {
+          if (err instanceof Error) {
+            res.status(500).send(err.message);
+          }
+        }
+      }
 }
 
 export default new MantenimientosController();

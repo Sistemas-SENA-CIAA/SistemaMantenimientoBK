@@ -55,7 +55,7 @@ export class ChequeosController{
         try {
             const chequeos = await Chequeo.find({
                 where: { mantenimiento: { idMantenimiento: Number(mantenimientoId) } },
-                relations: ['equipo', 'mantenimiento']
+                relations: ['equipo.serial', 'mantenimiento']
             });
     
             if (!chequeos.length) {
