@@ -62,17 +62,14 @@ class DependenciasController {
     modificarDependencias(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { idDependencia } = req.params;
-            const _a = req.body, { nombre, subsede, equipos, ambientes } = _a, otherFields = __rest(_a, ["nombre", "subsede", "equipos", "ambientes"]);
+            const otherFields = __rest(req.body, []);
             try {
                 const dependencia = yield dependenciaModel_1.Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
                 if (!dependencia) {
                     throw new Error('Dependencia no encontrada');
                 }
                 //Asignamos los nuevos valores a las propiedades de la Dependencia con el DeepPartial
-                const dependenciaModificada = Object.assign(Object.assign(Object.assign({}, dependencia), otherFields), { nombre,
-                    subsede,
-                    equipos,
-                    ambientes });
+                const dependenciaModificada = Object.assign(Object.assign({}, dependencia), otherFields);
                 //Guardamos los cambios en la base de datos
                 yield dependenciaModel_1.Dependencia.save(dependenciaModificada);
                 const registroActualizado = yield dependenciaModel_1.Dependencia.findOne({

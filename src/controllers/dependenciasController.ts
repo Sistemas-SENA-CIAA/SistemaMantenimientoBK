@@ -44,7 +44,7 @@ class DependenciasController{
     //Método para actualizar Dependencias
     async modificarDependencias(req: Request, res: Response) {
         const { idDependencia } = req.params;
-        const { nombre, subsede, equipos, ambientes, ...otherFields } = req.body;
+        const { ...otherFields } = req.body;
     
         try {
             const dependencia = await Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
@@ -57,10 +57,6 @@ class DependenciasController{
             const dependenciaModificada: DeepPartial<Dependencia> = {
                 ...dependencia,
                 ...otherFields,
-                nombre,
-                subsede,
-                equipos,
-                ambientes
             };
                   
     
