@@ -60,7 +60,7 @@ class ChequeosController {
             try {
                 const chequeos = yield chequeoModel_1.Chequeo.find({
                     where: { mantenimiento: { idMantenimiento: Number(mantenimientoId) } },
-                    relations: ['equipo.serial', 'mantenimiento']
+                    relations: ['equipo', 'mantenimiento']
                 });
                 if (!chequeos.length) {
                     return res.status(404).json({ message: 'No se encontraron chequeos para el mantenimiento especificado' });
