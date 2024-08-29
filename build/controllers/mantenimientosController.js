@@ -182,7 +182,7 @@ class MantenimientosController {
             try {
                 const mantenimiento = yield conexion_1.AppDataSource.getRepository(mantenimientoModel_1.Mantenimiento).findOne({
                     where: { idMantenimiento: parseInt(idMantenimiento) },
-                    relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'equipos.chequeos.mantenimiento', 'equipos.mantenimientos'],
+                    relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'equipos.chequeos.mantenimiento', 'equipos.mantenimientos', 'chequeos.equipo.serial'],
                 });
                 if (!mantenimiento) {
                     return res.status(404).json({ message: 'Mantenimiento no encontrado' });
