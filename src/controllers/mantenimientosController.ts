@@ -59,7 +59,8 @@ class MantenimientosController{
                     relations: [
                         'equipos', 'usuario', 'chequeos', 
                         'equipos.cuentaDante', 'equipos.tipoEquipo', 
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
+                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede',
+
                     ]
                 });
             } else {
@@ -68,7 +69,7 @@ class MantenimientosController{
                     relations: [
                         'equipos', 'usuario', 'chequeos', 
                         'equipos.cuentaDante', 'equipos.tipoEquipo', 
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede'
+                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'chequeos.equipo.serial'
                     ]
                 });
             }
