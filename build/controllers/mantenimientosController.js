@@ -76,7 +76,7 @@ class MantenimientosController {
                         where: { usuario: { correo: usuario.correo } },
                         relations: [
                             'equipos', 'usuario', 'chequeos',
-                            'equipos.cuentaDante', 'equipos.tipoEquipo',
+                            'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.subsede',
                             'equipos.estado', 'equipos.chequeos', 'equipos.chequeos.equipo', 'equipos.subsede', 'chequeos.equipo'
                         ]
                     });
@@ -86,7 +86,7 @@ class MantenimientosController {
                     mantenimientos = yield mantenimientoModel_1.Mantenimiento.find({
                         relations: [
                             'equipos', 'usuario', 'chequeos',
-                            'equipos.cuentaDante', 'equipos.tipoEquipo',
+                            'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.subsede',
                             'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'chequeos.equipo'
                         ]
                     });
