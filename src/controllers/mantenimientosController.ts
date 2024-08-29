@@ -59,8 +59,7 @@ class MantenimientosController{
                     relations: [
                         'equipos', 'usuario', 'chequeos', 
                         'equipos.cuentaDante', 'equipos.tipoEquipo', 
-                        'equipos.estado', 'equipos.chequeos', 'equipos.subsede',
-
+                        'equipos.estado', 'equipos.chequeos', 'equipos.chequeos.equipo.serial', 'equipos.subsede'
                     ]
                 });
             } else {
@@ -177,7 +176,7 @@ class MantenimientosController{
         try {
           const mantenimiento = await AppDataSource.getRepository(Mantenimiento).findOne({
             where: { idMantenimiento: parseInt(idMantenimiento) },
-            relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'equipos.chequeos.mantenimiento','equipos.mantenimientos', 'chequeos.equipo.serial'],
+            relations: ['equipos', 'equipos.cuentaDante', 'equipos.tipoEquipo', 'equipos.estado', 'equipos.chequeos', 'equipos.subsede', 'equipos.chequeos.mantenimiento','equipos.mantenimientos'],
           });
       
           if (!mantenimiento) {
