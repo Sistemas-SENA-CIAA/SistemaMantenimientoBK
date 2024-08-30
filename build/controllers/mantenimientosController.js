@@ -49,7 +49,6 @@ class MantenimientosController {
                 mantenimiento.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
                 mantenimiento.usuario = usuario;
                 mantenimiento.equipos = equipos;
-                mantenimiento.chequeosMantenimiento = chequeosMantenimiento;
                 const errors = yield (0, class_validator_1.validate)(mantenimiento);
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });

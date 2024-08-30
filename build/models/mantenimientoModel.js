@@ -13,7 +13,6 @@ exports.Mantenimiento = void 0;
 const typeorm_1 = require("typeorm");
 const usuarioModel_1 = require("./usuarioModel");
 const equipoModel_1 = require("./equipoModel");
-const ChequeoMantenimiento_1 = require("./ChequeoMantenimiento");
 const class_validator_1 = require("class-validator");
 const IsBeforeConstraint_1 = require("../validators/IsBeforeConstraint");
 const chequeoModel_1 = require("./chequeoModel");
@@ -55,10 +54,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => chequeoModel_1.Chequeo, chequeo => chequeo.mantenimiento),
     __metadata("design:type", Array)
 ], Mantenimiento.prototype, "chequeos", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => ChequeoMantenimiento_1.ChequeoMantenimiento, (chequeoMantenimiento) => chequeoMantenimiento.mantenimiento),
-    __metadata("design:type", Array)
-], Mantenimiento.prototype, "chequeosMantenimiento", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

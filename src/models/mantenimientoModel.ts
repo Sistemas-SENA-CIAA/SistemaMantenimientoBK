@@ -1,7 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Usuario } from "./usuarioModel";
 import { Equipo } from "./equipoModel";
-import { ChequeoMantenimiento } from "./ChequeoMantenimiento";
 import { IsNotEmpty, Length } from "class-validator";
 import { IsBefore } from "../validators/IsBeforeConstraint";
 import { Chequeo } from "./chequeoModel";
@@ -35,8 +34,6 @@ export class Mantenimiento extends BaseEntity{
     @OneToMany(() => Chequeo, chequeo => chequeo.mantenimiento)
     chequeos: Chequeo[];
 
-    @OneToMany(() => ChequeoMantenimiento, (chequeoMantenimiento) => chequeoMantenimiento.mantenimiento)
-    chequeosMantenimiento: ChequeoMantenimiento[];
 
     @CreateDateColumn()
     createdAt: Date;

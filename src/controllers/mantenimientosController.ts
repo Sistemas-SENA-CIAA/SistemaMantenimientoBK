@@ -28,7 +28,6 @@ class MantenimientosController{
             mantenimiento.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
             mantenimiento.usuario = usuario;
             mantenimiento.equipos = equipos;
-            mantenimiento.chequeosMantenimiento = chequeosMantenimiento;
 
             const errors = await validate(mantenimiento);
             if (errors.length > 0) {

@@ -41,7 +41,6 @@ class EquiposController{
             equipo.dependencia = dependencia;
             equipo.ambiente = ambiente;
             equipo.mantenimientos = mantenimientos;
-            equipo.chequeosMantenimiento = chequeosMantenimiento;
 
             const errors = await validate(equipo);
             if (errors.length > 0) {

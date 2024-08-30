@@ -8,7 +8,6 @@ import { Rol } from "../models/rolModel";
 import { Estado } from "../models/estadoModel";
 import { Chequeo } from "../models/chequeoModel";
 import { Sede } from "../models/sedeModel";
-import { ChequeoMantenimiento } from "../models/ChequeoMantenimiento";
 import { Subsede } from "../models/subsedeModel";
 import { Dependencia } from "../models/dependenciaModel";
 import { Ambiente } from "../models/ambienteModel";
@@ -23,7 +22,7 @@ export const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     logging: true,
-    entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Sede, Subsede, Dependencia, ChequeoMantenimiento, Ambiente],
+    entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Sede, Subsede, Dependencia, Ambiente],
     synchronize: false
 })
 

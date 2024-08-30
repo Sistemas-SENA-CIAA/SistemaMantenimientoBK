@@ -19,7 +19,6 @@ const chequeoModel_1 = require("./chequeoModel");
 const mantenimientoModel_1 = require("./mantenimientoModel");
 const sedeModel_1 = require("./sedeModel");
 const subsedeModel_1 = require("./subsedeModel");
-const ChequeoMantenimiento_1 = require("./ChequeoMantenimiento");
 const dependenciaModel_1 = require("./dependenciaModel");
 const ambienteModel_1 = require("./ambienteModel");
 let Equipo = class Equipo extends typeorm_1.BaseEntity {
@@ -104,10 +103,6 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], Equipo.prototype, "mantenimientos", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => ChequeoMantenimiento_1.ChequeoMantenimiento, (chequeoMantenimiento) => chequeoMantenimiento.equipo),
-    __metadata("design:type", Array)
-], Equipo.prototype, "chequeosMantenimiento", void 0);
 exports.Equipo = Equipo = __decorate([
     (0, typeorm_1.Entity)('equipos')
 ], Equipo);

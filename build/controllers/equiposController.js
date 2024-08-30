@@ -55,7 +55,6 @@ class EquiposController {
                 equipo.dependencia = dependencia;
                 equipo.ambiente = ambiente;
                 equipo.mantenimientos = mantenimientos;
-                equipo.chequeosMantenimiento = chequeosMantenimiento;
                 const errors = yield (0, class_validator_1.validate)(equipo);
                 if (errors.length > 0) {
                     return res.status(400).json({ errors });

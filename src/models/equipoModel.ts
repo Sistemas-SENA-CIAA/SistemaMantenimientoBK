@@ -7,7 +7,6 @@ import { Chequeo } from "./chequeoModel";
 import { Mantenimiento } from "./mantenimientoModel";
 import { Sede } from "./sedeModel";
 import { Subsede } from "./subsedeModel";
-import { ChequeoMantenimiento } from "./ChequeoMantenimiento";
 import { Dependencia } from "./dependenciaModel";
 import { Ambiente } from "./ambienteModel";
 
@@ -75,7 +74,4 @@ export class Equipo extends BaseEntity{
         inverseJoinColumn: { name: 'mantenimiento_id', referencedColumnName: 'idMantenimiento' }
     })
     mantenimientos: Mantenimiento[];
-
-    @OneToMany(() => ChequeoMantenimiento, (chequeoMantenimiento) => chequeoMantenimiento.equipo)
-    chequeosMantenimiento: ChequeoMantenimiento[];
 }
