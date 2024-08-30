@@ -9,6 +9,6 @@ router.get('/', verificarToken, validarRol(['ADMINISTRADOR', 'TÉCNICO EN CAMPO'
 
 router.post('/', verificarToken, validarRol(['ADMINISTRADOR']), dependenciasController.agregarDependencia);
 
-router.put('/:idSede', verificarToken, validarRol(['ADMINISTRADOR']), dependenciasController.modificarDependencias);
+router.put('/:idDependencia', verificarToken, validarRol(['ADMINISTRADOR']), dependenciasController.modificarDependencias);
 
 export default router;

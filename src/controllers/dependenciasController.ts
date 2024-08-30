@@ -44,25 +44,29 @@ class DependenciasController{
     //Método para actualizar Dependencias
     async modificarDependencias(req: Request, res: Response) {
         const { idDependencia } = req.params;
-        const { nombre, subsede, equipos, ambientes } = req.body;
+        const { ...otherFields } = req.body;
       
         try {
-          const dependencia = await Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
-      
-          if (!dependencia) {
-            throw new Error('Dependencia no encontrada');
-          }
-      
-          dependencia.nombre = nombre;
-          dependencia.subsede = subsede; // Asegúrate de que subsede sea un número
-          dependencia.equipos = equipos; // Si quieres reemplazar los equipos
-          dependencia.ambientes = ambientes; // Si quieres reemplazar los ambientes
-      
-          await Dependencia.save(dependencia);
-      
-          const registroActualizado = await Dependencia.findOne({
-            where: { idDependencia: Number(idDependencia) }
-           }); 
+            const dependencia = await Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
+    
+            if (!dependencia) {
+                throw new Error('Dependencia no encontrada');
+            }
+    
+            //Asignamos los nuevos valores a las propiedades del Area
+            const dependenciaModificada: DeepPartial<Dependencia> = {
+                ...dependencia,
+                ...otherFields 
+            };
+                  
+    
+            //Guardamos los cambios en la base de datos
+            await Dependencia.save(dependenciaModificada);
+    
+            const registroActualizado = await Dependencia.findOne({
+                where: { idDependencia: Number(idDependencia) }
+            });
+    
             res.status(200).json(registroActualizado);
         } catch (err) {
           console.error('Error al modificar la dependencia:', err);

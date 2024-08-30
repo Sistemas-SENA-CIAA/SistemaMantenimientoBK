@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const class_validator_1 = require("class-validator");
 const dependenciaModel_1 = require("../models/dependenciaModel");
@@ -51,17 +62,16 @@ class DependenciasController {
     modificarDependencias(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { idDependencia } = req.params;
-            const { nombre, subsede, equipos, ambientes } = req.body;
+            const otherFields = __rest(req.body, []);
             try {
                 const dependencia = yield dependenciaModel_1.Dependencia.findOne({ where: { idDependencia: Number(idDependencia) } });
                 if (!dependencia) {
                     throw new Error('Dependencia no encontrada');
                 }
-                dependencia.nombre = nombre;
-                dependencia.subsede = subsede; // Asegúrate de que subsede sea un número
-                dependencia.equipos = equipos; // Si quieres reemplazar los equipos
-                dependencia.ambientes = ambientes; // Si quieres reemplazar los ambientes
-                yield dependenciaModel_1.Dependencia.save(dependencia);
+                //Asignamos los nuevos valores a las propiedades del Area
+                const dependenciaModificada = Object.assign(Object.assign({}, dependencia), otherFields);
+                //Guardamos los cambios en la base de datos
+                yield dependenciaModel_1.Dependencia.save(dependenciaModificada);
                 const registroActualizado = yield dependenciaModel_1.Dependencia.findOne({
                     where: { idDependencia: Number(idDependencia) }
                 });

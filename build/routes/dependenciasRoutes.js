@@ -10,5 +10,5 @@ const rolValidatorMiddleware_1 = __importDefault(require("../middlewares/rolVali
 const router = express_1.default.Router();
 router.get('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'TÉCNICO EN CAMPO', 'USUARIO DE CONSULTA']), dependenciasController_1.default.listarDependencias);
 router.post('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), dependenciasController_1.default.agregarDependencia);
-router.put('/:idSede', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), dependenciasController_1.default.modificarDependencias);
+router.put('/:idDependencia', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), dependenciasController_1.default.modificarDependencias);
 exports.default = router;
