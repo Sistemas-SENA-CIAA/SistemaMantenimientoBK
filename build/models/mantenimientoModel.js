@@ -39,7 +39,7 @@ __decorate([
 ], Mantenimiento.prototype, "fechaProxMantenimiento", void 0);
 __decorate([
     (0, typeorm_1.Column)('date', { name: 'fecha_ultimo_mantenimiento' }),
-    (0, IsBeforeConstraint_1.IsBefore)('fechaProxMantenimiento', { message: "La fecha debe ser anterior a la fecha del próximo mantenimientoa" }),
+    (0, IsBeforeConstraint_1.IsBefore)('fechaProxMantenimiento', { message: "La fecha debe ser anterior a la fecha del próximo mantenimiento" }),
     __metadata("design:type", Date)
 ], Mantenimiento.prototype, "fechaUltimoMantenimiento", void 0);
 __decorate([
@@ -59,6 +59,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => ChequeoMantenimiento_1.ChequeoMantenimiento, (chequeoMantenimiento) => chequeoMantenimiento.mantenimiento),
     __metadata("design:type", Array)
 ], Mantenimiento.prototype, "chequeosMantenimiento", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Mantenimiento.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", Date)
+], Mantenimiento.prototype, "updatedAt", void 0);
 exports.Mantenimiento = Mantenimiento = __decorate([
     (0, typeorm_1.Entity)('mantenimientos')
 ], Mantenimiento);
