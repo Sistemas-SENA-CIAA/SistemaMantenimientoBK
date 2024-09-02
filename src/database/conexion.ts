@@ -23,7 +23,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE,
     logging: true,
     entities: [Equipo, TipoEquipo, CuentaDante, Mantenimiento, Usuario, Rol, Estado, Chequeo, Sede, Subsede, Dependencia, Ambiente],
-    synchronize: true
+    synchronize: false
 })
 
 AppDataSource.initialize()
