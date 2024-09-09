@@ -1,10 +1,17 @@
 import { Request, Response } from "express";
 import { Equipo } from "../models/equipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
-import { AppDataSource } from "../database/conexion";
-import { Estado } from "../models/estadoModel";
 import { DeepPartial } from "typeorm";
 import { validate } from "class-validator";
+import { Sede } from "../models/sedeModel";
+import { Subsede } from "../models/subsedeModel";
+import { TipoEquipo } from "../models/tipoEquipoModel";
+import { EquipoRow } from "../interfaces/equipo.interface";
+import * as XLSX from 'xlsx';
+import { Estado } from "../models/estadoModel";
+import { Dependencia } from "../models/dependenciaModel";
+import { Ambiente } from "../models/ambienteModel";
+
 
 class EquiposController{
     constructor(){
@@ -123,6 +130,57 @@ class EquiposController{
             if (err instanceof Error) {
                 res.status(500).send(err.message);
             }
+        }
+    }
+
+    async importarEquipos(req: Request, res: Response) {
+        try {
+          //Leemos el archivo XLSX desde la request
+          const file = req.file;
+          if (!file) {
+            return res.status(400).json({ message: 'No se subió ningún archivo' });
+          }
+    
+          const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const data = XLSX.utils.sheet_to_json<EquipoRow>(sheet);
+    
+          for (const row of data) {
+            //Buscamos las entidades relacionadas por nombre
+            const cuentaDante = await CuentaDante.findOne({ where: { documento: row.cuentaDante } });
+            const sede = await Sede.findOne({ where: { idSede: row.sede } });
+            const subsede = await Subsede.findOne({ where: { idSubsede: row.subsede } });
+            const dependencia = await Dependencia.findOne({ where: { idDependencia: row.dependencia } });
+            const ambiente = await Ambiente.findOne({ where: { idAmbiente: row.ambiente } });
+            const tipoEquipo = await TipoEquipo.findOne({ where: { id: row.tipoEquipo } });
+            const estado = await Estado.findOne({where: {estado: row.estado }}) 
+    
+            if (!sede || !subsede || !tipoEquipo || !dependencia || !ambiente || !cuentaDante || !estado) {
+              throw new Error('Error: No se encontraron todas las relaciones');
+            }
+    
+            //Creamos y guardamos el equipo con las relaciones
+            const equipo:  DeepPartial<Equipo> = {
+              serial: row.serial,
+              marca: row.marca,
+              referencia: row.referencia,
+              fechaCompra: row.fechaCompra,
+              tipoEquipo: tipoEquipo,
+              cuentaDante: cuentaDante,
+              sede: sede,  
+              subsede: subsede,
+              dependencia: dependencia,
+              ambiente: ambiente,
+              estado: estado
+            };
+    
+            await Equipo.save(equipo);
+          }
+    
+          res.status(200).json({ message: 'Equipos importados exitosamente' });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Error al importar los equipos' });
         }
     }
 }
