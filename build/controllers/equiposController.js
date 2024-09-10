@@ -161,25 +161,36 @@ class EquiposController {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
-                // Suponiendo que el archivo XLSX se envía como FormData
-                const file = (_a = req.file) === null || _a === void 0 ? void 0 : _a.buffer; // Obtener el buffer del archivo subido
-                console.log("ARCHIVO: " + file);
+                const file = (_a = req.file) === null || _a === void 0 ? void 0 : _a.buffer;
                 if (!file) {
                     return res.status(400).json({ message: 'No se subió ningún archivo' });
                 }
                 // Leer el archivo como un buffer
                 const workbook = XLSX.read(file, { type: 'buffer' });
-                const sheetName = workbook.SheetNames[0]; // Obtener el nombre de la primera hoja
-                const worksheet = workbook.Sheets[sheetName]; // Obtener los datos de la hoja
-                // Convertir los datos de la hoja a un array de objetos
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                // Convertir los datos del worksheet a un array de objetos
                 const data = XLSX.utils.sheet_to_json(worksheet);
                 const equipos = data.map(item => {
-                    // Validación y mapeo
+                    let fechaCompra;
+                    // Verificar si la fechaCompra es un número (serial de Excel)
+                    if (typeof item.fechaCompra === 'number') {
+                        const excelDate = item.fechaCompra; // Número serial
+                        const parsedDate = XLSX.SSF.parse_date_code(excelDate); // Convierte el serial a una fecha
+                        fechaCompra = new Date(parsedDate.y, parsedDate.m - 1, parsedDate.d); // Construir la fecha en formato JS
+                    }
+                    else if (typeof item.fechaCompra === 'string') {
+                        // Intentar parsear la fecha si viene como cadena
+                        fechaCompra = new Date(item.fechaCompra);
+                    }
+                    else {
+                        fechaCompra = new Date(item.fechaCompra); // Si es Date, lo manejamos como tal
+                    }
                     return new equipoModel_1.Equipo({
                         serial: item.serial,
                         marca: item.marca,
                         referencia: item.referencia,
-                        fechaCompra: new Date(item.fechaCompra),
+                        fechaCompra: fechaCompra,
                         placaSena: item.placaSena,
                         tipoEquipo: item.tipoEquipo,
                         cuentaDante: item.cuentaDante,
@@ -189,7 +200,6 @@ class EquiposController {
                         ambiente: item.ambiente
                     });
                 });
-                console.log(equipos);
                 // Guardar los datos en la base de datos
                 yield equipoModel_1.Equipo.save(equipos);
                 res.json({ message: 'Datos importados correctamente' });
