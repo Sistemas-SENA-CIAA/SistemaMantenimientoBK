@@ -159,16 +159,19 @@ class EquiposController {
     }
     importarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 // Suponiendo que el archivo XLSX se envía como FormData
-                const file = req.file;
+                const file = (_a = req.file) === null || _a === void 0 ? void 0 : _a.buffer; // Obtener el buffer del archivo subido
+                console.log("ARCHIVO: " + file);
                 if (!file) {
                     return res.status(400).json({ message: 'No se subió ningún archivo' });
                 }
-                const workbook = XLSX.readFile(file.path);
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                // Convertir los datos del worksheet a un array de objetos
+                // Leer el archivo como un buffer
+                const workbook = XLSX.read(file, { type: 'buffer' });
+                const sheetName = workbook.SheetNames[0]; // Obtener el nombre de la primera hoja
+                const worksheet = workbook.Sheets[sheetName]; // Obtener los datos de la hoja
+                // Convertir los datos de la hoja a un array de objetos
                 const data = XLSX.utils.sheet_to_json(worksheet);
                 const equipos = data.map(item => {
                     // Validación y mapeo
@@ -186,6 +189,7 @@ class EquiposController {
                         ambiente: item.ambiente
                     });
                 });
+                console.log(equipos);
                 // Guardar los datos en la base de datos
                 yield equipoModel_1.Equipo.save(equipos);
                 res.json({ message: 'Datos importados correctamente' });
