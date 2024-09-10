@@ -12,7 +12,7 @@ export interface EquipoRow {
     referencia: string;
     fechaCompra: Date;
     placaSena: string;
-    tipoEquipo: TipoEquipo;                
+    tipoEquipo?: TipoEquipo;                
     cuentaDante?: CuentaDante; 
     sede?: Sede;               
     subsede?: Subsede;            

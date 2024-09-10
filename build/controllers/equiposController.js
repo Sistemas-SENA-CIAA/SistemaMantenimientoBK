@@ -179,7 +179,7 @@ class EquiposController {
                         serial: item.serial,
                         marca: item.marca,
                         referencia: item.referencia,
-                        fechaCompra: item.fechaCompra,
+                        fechaCompra: new Date(item.fechaCompra),
                         placaSena: item.placaSena,
                         tipoEquipo: item.tipoEquipo,
                         cuentaDante: item.cuentaDante,
