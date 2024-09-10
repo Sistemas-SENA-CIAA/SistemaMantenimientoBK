@@ -46,13 +46,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const equipoModel_1 = require("../models/equipoModel");
 const cuentaDanteModel_1 = require("../models/cuentaDanteModel");
 const class_validator_1 = require("class-validator");
-const sedeModel_1 = require("../models/sedeModel");
-const subsedeModel_1 = require("../models/subsedeModel");
-const tipoEquipoModel_1 = require("../models/tipoEquipoModel");
 const XLSX = __importStar(require("xlsx"));
-const estadoModel_1 = require("../models/estadoModel");
-const dependenciaModel_1 = require("../models/dependenciaModel");
-const ambienteModel_1 = require("../models/ambienteModel");
 class EquiposController {
     constructor() {
     }
@@ -166,47 +160,39 @@ class EquiposController {
     importarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //Leemos el archivo XLSX desde la request
+                // Suponiendo que el archivo XLSX se envía como FormData
                 const file = req.file;
                 if (!file) {
                     return res.status(400).json({ message: 'No se subió ningún archivo' });
                 }
-                const workbook = XLSX.read(file.buffer, { type: 'buffer' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const data = XLSX.utils.sheet_to_json(sheet);
-                for (const row of data) {
-                    //Buscamos las entidades relacionadas por nombre
-                    const cuentaDante = yield cuentaDanteModel_1.CuentaDante.findOne({ where: { documento: row.cuentaDante } });
-                    const sede = yield sedeModel_1.Sede.findOne({ where: { idSede: row.sede } });
-                    const subsede = yield subsedeModel_1.Subsede.findOne({ where: { idSubsede: row.subsede } });
-                    const dependencia = yield dependenciaModel_1.Dependencia.findOne({ where: { idDependencia: row.dependencia } });
-                    const ambiente = yield ambienteModel_1.Ambiente.findOne({ where: { idAmbiente: row.ambiente } });
-                    const tipoEquipo = yield tipoEquipoModel_1.TipoEquipo.findOne({ where: { id: row.tipoEquipo } });
-                    const estado = yield estadoModel_1.Estado.findOne({ where: { estado: row.estado } });
-                    if (!sede || !subsede || !tipoEquipo || !dependencia || !ambiente || !cuentaDante || !estado) {
-                        throw new Error('Error: No se encontraron todas las relaciones');
-                    }
-                    //Creamos y guardamos el equipo con las relaciones
-                    const equipo = {
-                        serial: row.serial,
-                        marca: row.marca,
-                        referencia: row.referencia,
-                        fechaCompra: row.fechaCompra,
-                        tipoEquipo: tipoEquipo,
-                        cuentaDante: cuentaDante,
-                        sede: sede,
-                        subsede: subsede,
-                        dependencia: dependencia,
-                        ambiente: ambiente,
-                        estado: estado
-                    };
-                    yield equipoModel_1.Equipo.save(equipo);
-                }
-                res.status(200).json({ message: 'Equipos importados exitosamente' });
+                const workbook = XLSX.readFile(file.path);
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                // Convertir los datos del worksheet a un array de objetos
+                const data = XLSX.utils.sheet_to_json(worksheet);
+                const equipos = data.map(item => {
+                    // Validación y mapeo
+                    return new equipoModel_1.Equipo({
+                        serial: item.serial,
+                        marca: item.marca,
+                        referencia: item.referencia,
+                        fechaCompra: item.fechaCompra,
+                        placaSena: item.placaSena,
+                        tipoEquipo: item.tipoEquipo,
+                        cuentaDante: item.cuentaDante,
+                        sede: item.sede,
+                        subsede: item.subsede,
+                        dependencia: item.dependencia,
+                        ambiente: item.ambiente
+                    });
+                });
+                // Guardar los datos en la base de datos
+                yield equipoModel_1.Equipo.save(equipos);
+                res.json({ message: 'Datos importados correctamente' });
             }
             catch (error) {
                 console.error(error);
-                res.status(500).json({ message: 'Error al importar los equipos' });
+                res.status(500).json({ error: 'Error al importar datos' });
             }
         });
     }

@@ -74,4 +74,9 @@ export class Equipo extends BaseEntity{
         inverseJoinColumn: { name: 'mantenimiento_id', referencedColumnName: 'idMantenimiento' }
     })
     mantenimientos: Mantenimiento[];
+
+    constructor(partial?: Partial<Equipo>) {
+        super();
+        Object.assign(this, partial);
+    }
 }

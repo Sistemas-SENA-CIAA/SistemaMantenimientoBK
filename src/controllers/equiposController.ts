@@ -135,52 +135,44 @@ class EquiposController{
 
     async importarEquipos(req: Request, res: Response) {
         try {
-          //Leemos el archivo XLSX desde la request
-          const file = req.file;
-          if (!file) {
-            return res.status(400).json({ message: 'No se subió ningún archivo' });
-          }
-    
-          const workbook = XLSX.read(file.buffer, { type: 'buffer' });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const data = XLSX.utils.sheet_to_json<EquipoRow>(sheet);
-    
-          for (const row of data) {
-            //Buscamos las entidades relacionadas por nombre
-            const cuentaDante = await CuentaDante.findOne({ where: { documento: row.cuentaDante } });
-            const sede = await Sede.findOne({ where: { idSede: row.sede } });
-            const subsede = await Subsede.findOne({ where: { idSubsede: row.subsede } });
-            const dependencia = await Dependencia.findOne({ where: { idDependencia: row.dependencia } });
-            const ambiente = await Ambiente.findOne({ where: { idAmbiente: row.ambiente } });
-            const tipoEquipo = await TipoEquipo.findOne({ where: { id: row.tipoEquipo } });
-            const estado = await Estado.findOne({where: {estado: row.estado }}) 
-    
-            if (!sede || !subsede || !tipoEquipo || !dependencia || !ambiente || !cuentaDante || !estado) {
-              throw new Error('Error: No se encontraron todas las relaciones');
+            // Suponiendo que el archivo XLSX se envía como FormData
+            const file = req.file as Express.Multer.File; 
+
+            if (!file) {
+                return res.status(400).json({ message: 'No se subió ningún archivo' });
             }
+
+            const workbook = XLSX.readFile(file.path);
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
     
-            //Creamos y guardamos el equipo con las relaciones
-            const equipo:  DeepPartial<Equipo> = {
-              serial: row.serial,
-              marca: row.marca,
-              referencia: row.referencia,
-              fechaCompra: row.fechaCompra,
-              tipoEquipo: tipoEquipo,
-              cuentaDante: cuentaDante,
-              sede: sede,  
-              subsede: subsede,
-              dependencia: dependencia,
-              ambiente: ambiente,
-              estado: estado
-            };
+            // Convertir los datos del worksheet a un array de objetos
+            const data: EquipoRow[] = XLSX.utils.sheet_to_json(worksheet);
+
+            const equipos: Equipo[] = data.map(item => {
+                // Validación y mapeo
+                return new Equipo({
+                    serial: item.serial,
+                    marca: item.marca,
+                    referencia: item.referencia,
+                    fechaCompra: item.fechaCompra,
+                    placaSena: item.placaSena,
+                    tipoEquipo: item.tipoEquipo,
+                    cuentaDante: item.cuentaDante,
+                    sede: item.sede,
+                    subsede: item.subsede,
+                    dependencia: item.dependencia,
+                    ambiente: item.ambiente
+                });
+            });
     
-            await Equipo.save(equipo);
-          }
+            // Guardar los datos en la base de datos
+            await Equipo.save(equipos);
     
-          res.status(200).json({ message: 'Equipos importados exitosamente' });
+            res.json({ message: 'Datos importados correctamente' });
         } catch (error) {
-          console.error(error);
-          res.status(500).json({ message: 'Error al importar los equipos' });
+            console.error(error);
+            res.status(500).json({ error: 'Error al importar datos' });
         }
     }
 }

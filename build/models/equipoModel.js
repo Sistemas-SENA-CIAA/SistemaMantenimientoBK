@@ -22,6 +22,10 @@ const subsedeModel_1 = require("./subsedeModel");
 const dependenciaModel_1 = require("./dependenciaModel");
 const ambienteModel_1 = require("./ambienteModel");
 let Equipo = class Equipo extends typeorm_1.BaseEntity {
+    constructor(partial) {
+        super();
+        Object.assign(this, partial);
+    }
 };
 exports.Equipo = Equipo;
 __decorate([
@@ -104,5 +108,6 @@ __decorate([
     __metadata("design:type", Array)
 ], Equipo.prototype, "mantenimientos", void 0);
 exports.Equipo = Equipo = __decorate([
-    (0, typeorm_1.Entity)('equipos')
+    (0, typeorm_1.Entity)('equipos'),
+    __metadata("design:paramtypes", [Object])
 ], Equipo);
