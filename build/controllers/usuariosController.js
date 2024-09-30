@@ -158,11 +158,12 @@ class UsuariosController {
     }
     enviarCorreoRecuperación(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const correo = req.body;
+            const { correo } = req.body;
             try {
-                const usuario = yield usuarioModel_1.Usuario.findOne({ where: { correo: correo } });
-                if (!usuario)
+                const usuario = yield usuarioModel_1.Usuario.findOne({ where: { correo } });
+                if (!usuario) {
                     return res.status(404).json({ message: 'Usuario no encontrado' });
+                }
                 const token = jwt.sign({ userId: usuario.documento }, process.env.JWT_SECRET, { expiresIn: '1h' });
                 usuario.tokenRestablecerContrasenia = token;
                 usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);

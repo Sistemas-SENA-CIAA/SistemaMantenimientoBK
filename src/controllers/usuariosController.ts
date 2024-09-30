@@ -127,11 +127,13 @@ class UsuariosController {
     }
 
     async enviarCorreoRecuperación(req: Request, res: Response){
-        const correo = req.body;
+        const { correo } = req.body;
 
         try{
-            const usuario = await Usuario.findOne({ where: {correo: correo} });
-            if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
+            const usuario = await Usuario.findOne({ where: { correo } });
+            if (!usuario){ 
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
 
             const token = jwt.sign({ userId: usuario.documento }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 
