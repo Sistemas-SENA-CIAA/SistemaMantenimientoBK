@@ -12,6 +12,8 @@ const router = express_1.default.Router();
 //Ruta GET para los usuarios
 router.get('/', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'USUARIO DE CONSULTA', 'TÉCNICO EN CAMPO']), usuariosController_1.default.listarUsuarios);
 router.put('/:documento/estado', authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'USUARIO DE CONSULTA']), usuariosController_1.default.actualizarEstadoUsuario);
+router.post('/recuperar-contraseña', usuariosController_1.default.enviarCorreoRecuperación);
+router.post('/recuperar-contraseña/:token', usuariosController_1.default.restablecerContrasenia);
 router.route("/:documento")
     .get(authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR', 'USUARIO DE CONSULTA']), usuariosController_1.default.obtenerRolUsuario)
     .put(authMiddleware_1.default, (0, rolValidatorMiddleware_1.default)(['ADMINISTRADOR']), usuariosController_1.default.modificarDatosUsuario);

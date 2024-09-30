@@ -2,6 +2,14 @@ import { Request, Response } from "express";
 import { Usuario } from "../models/usuarioModel";
 import { Estado } from "../models/estadoModel";
 import { DeepPartial } from "typeorm";
+import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
+import { transporter } from "../helpers/emailHelper";
+
+import dotenv from 'dotenv';
+import { error, info } from "console";
+
+dotenv.config();
 
 class UsuariosController {
     constructor(){
@@ -116,6 +124,72 @@ class UsuariosController {
         } catch (error) {
             res.status(500).json({ message: 'Error al obtener el rol del usuario', error });
         }    
+    }
+
+    async enviarCorreoRecuperación(req: Request, res: Response){
+        const correo = req.body;
+
+        try{
+            const usuario = await Usuario.findOne({ where: {correo: correo} });
+            if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+            const token = jwt.sign({ userId: usuario.documento }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+
+            usuario.tokenRestablecerContrasenia = token;
+            usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
+            await usuario.save();
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: usuario.correo,
+                subject: 'Restablecer contraseña',
+                html: `
+                  <p>Hola ${usuario.nombre},</p>
+                  <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
+                  <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                `
+              };
+
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                    res.status(500).json({ message: 'Error al enviar el correo' });
+                } else {
+                    res.json({ message: 'Se ha enviado un email de restablecimiento' });
+                }
+            });
+    
+        }catch(error){
+            console.error(error);
+            res.status(500).json({ message: 'Error interno del servidor' });
+        }
+    }
+
+    async restablecerContrasenia(req: Request, res: Response){
+        const { token } = req.params;
+        const { password } = req.body;
+
+        try{
+            const tokenDecod = jwt.verify(token, process.env.JWT_SECRET as string);
+
+            const usuario = await Usuario.findOneBy({ tokenRestablecerContrasenia: token });
+
+            if(!usuario) return res.status(400).json({ message: 'Token inválido o expirado' });
+
+            const salt = await bcrypt.genSalt(10);
+            const contraseniaCifrada = await bcrypt.hash(password, salt);
+
+            usuario.contrasenia = contraseniaCifrada;
+            
+            usuario.tokenRestablecerContrasenia = '';
+
+            res.json({ message: 'Contraseña actualizada correctamente' });
+
+            await usuario.save();
+        }catch(error){
+            console.error(error);
+            res.status(400).json({ message: 'Error en el sistema' });
+        }
     }
 }
 

@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -19,9 +42,17 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const usuarioModel_1 = require("../models/usuarioModel");
 const estadoModel_1 = require("../models/estadoModel");
+const jwt = __importStar(require("jsonwebtoken"));
+const bcrypt = __importStar(require("bcrypt"));
+const emailHelper_1 = require("../helpers/emailHelper");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class UsuariosController {
     constructor() {
     }
@@ -122,6 +153,65 @@ class UsuariosController {
             }
             catch (error) {
                 res.status(500).json({ message: 'Error al obtener el rol del usuario', error });
+            }
+        });
+    }
+    enviarCorreoRecuperación(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const correo = req.body;
+            try {
+                const usuario = yield usuarioModel_1.Usuario.findOne({ where: { correo: correo } });
+                if (!usuario)
+                    return res.status(404).json({ message: 'Usuario no encontrado' });
+                const token = jwt.sign({ userId: usuario.documento }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                usuario.tokenRestablecerContrasenia = token;
+                usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
+                yield usuario.save();
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: usuario.correo,
+                    subject: 'Restablecer contraseña',
+                    html: `
+                  <p>Hola ${usuario.nombre},</p>
+                  <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
+                  <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                `
+                };
+                emailHelper_1.transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(500).json({ message: 'Error al enviar el correo' });
+                    }
+                    else {
+                        res.json({ message: 'Se ha enviado un email de restablecimiento' });
+                    }
+                });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error interno del servidor' });
+            }
+        });
+    }
+    restablecerContrasenia(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { token } = req.params;
+            const { password } = req.body;
+            try {
+                const tokenDecod = jwt.verify(token, process.env.JWT_SECRET);
+                const usuario = yield usuarioModel_1.Usuario.findOneBy({ tokenRestablecerContrasenia: token });
+                if (!usuario)
+                    return res.status(400).json({ message: 'Token inválido o expirado' });
+                const salt = yield bcrypt.genSalt(10);
+                const contraseniaCifrada = yield bcrypt.hash(password, salt);
+                usuario.contrasenia = contraseniaCifrada;
+                usuario.tokenRestablecerContrasenia = '';
+                res.json({ message: 'Contraseña actualizada correctamente' });
+                yield usuario.save();
+            }
+            catch (error) {
+                console.error(error);
+                res.status(400).json({ message: 'Error en el sistema' });
             }
         });
     }

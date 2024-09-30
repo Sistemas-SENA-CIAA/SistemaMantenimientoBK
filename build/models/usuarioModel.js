@@ -52,6 +52,14 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "contrasenia", void 0);
 __decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Usuario.prototype, "tokenRestablecerContrasenia", void 0);
+__decorate([
+    (0, typeorm_1.Column)('date'),
+    __metadata("design:type", Date)
+], Usuario.prototype, "tokenRestablecerExpiracion", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Usuario.prototype, "createdAt", void 0);
