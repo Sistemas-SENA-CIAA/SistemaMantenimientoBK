@@ -48,9 +48,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const usuarioModel_1 = require("../models/usuarioModel");
 const estadoModel_1 = require("../models/estadoModel");
+const emailHelper_1 = require("../helpers/emailHelper");
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
-const emailHelper_1 = require("../helpers/emailHelper");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 class UsuariosController {
@@ -171,11 +171,46 @@ class UsuariosController {
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: usuario.correo,
-                    subject: 'Restablecer contraseña',
+                    subject: 'Restablecimiento de contraseña',
                     html: `
-                  <p>Hola ${usuario.nombre},</p>
-                  <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
-                  <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                <style>
+                    body {  
+                        font-family: Arial, sans-serif;
+                        background-color: #f5f5f5;
+                        margin: 0;
+                        padding: 0; 
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #fff;
+                        border-radius: 5px;
+                    }
+                    .content {
+                        text-align: center;
+                    }
+                    .button {
+                        background-color: #4CAF50;
+                        color: white;
+                        padding: 15px 32px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        margin-top: 20px;
+                    }
+                </style>
+                <div class="container">
+                    <div class="content">
+                        <h2>Hola ${usuario.nombre},</h2>
+                        <p>Te hemos enviado este correo porque has solicitado restablecer tu contraseña en el sistema de Gestión.</p>
+                        <p>Para actualizar tu contraseña, haz clic en el siguiente botón:</p>
+                        <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}" class="button">Restablecer contraseña</a>
+                        <p>Este enlace expirará el [fecha de caducidad].</p>
+                        <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+                    </div>
+                </div>
                 `
                 };
                 emailHelper_1.transporter.sendMail(mailOptions, (error, info) => {
@@ -201,8 +236,9 @@ class UsuariosController {
             try {
                 const tokenDecod = jwt.verify(token, process.env.JWT_SECRET);
                 const usuario = yield usuarioModel_1.Usuario.findOneBy({ tokenRestablecerContrasenia: token });
-                if (!usuario)
+                if (!usuario) {
                     return res.status(400).json({ message: 'Token inválido o expirado' });
+                }
                 const salt = yield bcrypt.genSalt(10);
                 const contraseniaCifrada = yield bcrypt.hash(password, salt);
                 usuario.contrasenia = contraseniaCifrada;
