@@ -5,7 +5,6 @@ import { DeepPartial } from "typeorm";
 import { transporter } from "../helpers/emailHelper";
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import * as pug from 'pug'
 
 import dotenv from 'dotenv';
 
@@ -141,14 +140,15 @@ class UsuariosController {
             usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
             await usuario.save();
 
-            const plantilla = pug.compileFile('../helpers/emailTemplate.pug');
-            const html = plantilla({ nombre: usuario.nombre, token });
-
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: usuario.correo,
                 subject: 'Restablecimiento de contraseña',
-                html
+                html: `
+                <h2>Hola ${usuario.nombre},</h2>
+                    <p>Haz clic en el siguiente enlace para cambiar tu contraseña en el sistema de gestión:</p>
+                    <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                `
             };
 
               transporter.sendMail(mailOptions, (error, info) => {

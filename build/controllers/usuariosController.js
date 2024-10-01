@@ -51,7 +51,6 @@ const estadoModel_1 = require("../models/estadoModel");
 const emailHelper_1 = require("../helpers/emailHelper");
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
-const pug = __importStar(require("pug"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 class UsuariosController {
@@ -169,13 +168,15 @@ class UsuariosController {
                 usuario.tokenRestablecerContrasenia = token;
                 usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
                 yield usuario.save();
-                const plantilla = pug.compileFile('../helpers/emailTemplate.pug');
-                const html = plantilla({ nombre: usuario.nombre, token });
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: usuario.correo,
                     subject: 'Restablecimiento de contraseña',
-                    html
+                    html: `
+                <h2>Hola ${usuario.nombre},</h2>
+                    <p>Haz clic en el siguiente enlace para cambiar tu contraseña en el sistema de gestión:</p>
+                    <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                `
                 };
                 emailHelper_1.transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
