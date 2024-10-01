@@ -169,7 +169,7 @@ class UsuariosController {
                 usuario.tokenRestablecerContrasenia = token;
                 usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
                 yield usuario.save();
-                const plantilla = pug.compileFile('emailTemplate.pug');
+                const plantilla = pug.compileFile('../helpers/emailTemplate.pug');
                 const html = plantilla({ nombre: usuario.nombre, token });
                 const mailOptions = {
                     from: process.env.EMAIL_USER,

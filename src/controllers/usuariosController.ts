@@ -141,7 +141,7 @@ class UsuariosController {
             usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
             await usuario.save();
 
-            const plantilla = pug.compileFile('emailTemplate.pug');
+            const plantilla = pug.compileFile('../helpers/emailTemplate.pug');
             const html = plantilla({ nombre: usuario.nombre, token });
 
             const mailOptions = {
