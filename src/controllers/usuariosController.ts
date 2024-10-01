@@ -5,9 +5,9 @@ import { DeepPartial } from "typeorm";
 import { transporter } from "../helpers/emailHelper";
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+import * as pug from 'pug'
 
 import dotenv from 'dotenv';
-import { error, info } from "console";
 
 dotenv.config();
 
@@ -141,50 +141,14 @@ class UsuariosController {
             usuario.tokenRestablecerExpiracion = new Date(Date.now() + 3600000);
             await usuario.save();
 
+            const plantilla = pug.compileFile('emailTemplate.pug');
+            const html = plantilla({ nombre: usuario.nombre, token });
+
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: usuario.correo,
                 subject: 'Restablecimiento de contraseña',
-                html: `
-                <style>
-                    body {  
-                        font-family: Arial, sans-serif;
-                        background-color: #f5f5f5;
-                        margin: 0;
-                        padding: 0; 
-                    }
-                    .container {
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 20px;
-                        background-color: #fff;
-                        border-radius: 5px;
-                    }
-                    .content {
-                        text-align: center;
-                    }
-                    .button {
-                        background-color: #4CAF50;
-                        color: white;
-                        padding: 15px 32px;
-                        text-align: center;
-                        text-decoration: none;
-                        display: inline-block;
-                        font-size: 16px;
-                        margin-top: 20px;
-                    }
-                </style>
-                <div class="container">
-                    <div class="content">
-                        <h2>Hola ${usuario.nombre},</h2>
-                        <p>Te hemos enviado este correo porque has solicitado restablecer tu contraseña en el sistema de Gestión.</p>
-                        <p>Para actualizar tu contraseña, haz clic en el siguiente botón:</p>
-                        <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}" class="button">Restablecer contraseña</a>
-                        <p>Este enlace expirará el [fecha de caducidad].</p>
-                        <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
-                    </div>
-                </div>
-                `
+                html
             };
 
               transporter.sendMail(mailOptions, (error, info) => {
