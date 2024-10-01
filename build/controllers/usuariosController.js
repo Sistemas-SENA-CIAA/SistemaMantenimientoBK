@@ -175,7 +175,7 @@ class UsuariosController {
                     html: `
                 <h2>Hola ${usuario.nombre},</h2>
                     <p>Haz clic en el siguiente enlace para cambiar tu contraseña en el sistema de gestión:</p>
-                    <a href="localhost:5173/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                    <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
                 `
                 };
                 emailHelper_1.transporter.sendMail(mailOptions, (error, info) => {

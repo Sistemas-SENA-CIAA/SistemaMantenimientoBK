@@ -6,6 +6,7 @@ import { transporter } from "../helpers/emailHelper";
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -147,7 +148,7 @@ class UsuariosController {
                 html: `
                 <h2>Hola ${usuario.nombre},</h2>
                     <p>Haz clic en el siguiente enlace para cambiar tu contraseña en el sistema de gestión:</p>
-                    <a href="localhost:5173/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
+                    <a href="https://mantenimiento-front.vercel.app/usuarios/recuperar-contraseña/${token}">Restablecer contraseña</a>
                 `
             };
 
