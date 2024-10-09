@@ -264,7 +264,7 @@ class MantenimientosController{
             res.status(500).send(err.message);
           }
         }
-      }
+    }
 }
 
 export default new MantenimientosController();

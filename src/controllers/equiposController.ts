@@ -3,15 +3,9 @@ import { Equipo } from "../models/equipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
 import { DeepPartial } from "typeorm";
 import { validate } from "class-validator";
-import { Sede } from "../models/sedeModel";
-import { Subsede } from "../models/subsedeModel";
-import { TipoEquipo } from "../models/tipoEquipoModel";
 import { EquipoRow } from "../interfaces/equipo.interface";
 import * as XLSX from 'xlsx';
-import { Estado } from "../models/estadoModel";
-import { Dependencia } from "../models/dependenciaModel";
-import { Ambiente } from "../models/ambienteModel";
-import { log } from "console";
+import { AppDataSource } from "../database/conexion";
 
 
 class EquiposController{
@@ -187,6 +181,22 @@ class EquiposController{
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Error al importar datos' });
+        }
+    }
+
+    async generarDatosCv(req: Request, res: Response) {
+        try {
+            const equipoRepository = AppDataSource.getRepository(Equipo);
+            const datos = await equipoRepository
+                .createQueryBuilder('equipo')
+                .select(['equipo.serial', 'equipo.marca', 'equipo.referencia', 'equipo.placa_sena'])
+                .getRawMany();
+            
+            res.status(200).json(datos);
+        } catch (err) {
+            if (err instanceof Error) {
+                res.status(500).send(err.message);
+            }
         }
     }
 }

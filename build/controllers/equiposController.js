@@ -47,6 +47,7 @@ const equipoModel_1 = require("../models/equipoModel");
 const cuentaDanteModel_1 = require("../models/cuentaDanteModel");
 const class_validator_1 = require("class-validator");
 const XLSX = __importStar(require("xlsx"));
+const conexion_1 = require("../database/conexion");
 class EquiposController {
     constructor() {
     }
@@ -207,6 +208,23 @@ class EquiposController {
             catch (error) {
                 console.error(error);
                 res.status(500).json({ error: 'Error al importar datos' });
+            }
+        });
+    }
+    generarDatosCv(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const equipoRepository = conexion_1.AppDataSource.getRepository(equipoModel_1.Equipo);
+                const datos = yield equipoRepository
+                    .createQueryBuilder('equipo')
+                    .select(['equipo.serial', 'equipo.marca', 'equipo.referencia', 'equipo.placa_sena'])
+                    .getRawMany();
+                res.status(200).json(datos);
+            }
+            catch (err) {
+                if (err instanceof Error) {
+                    res.status(500).send(err.message);
+                }
             }
         });
     }
