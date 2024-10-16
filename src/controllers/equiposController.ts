@@ -204,7 +204,8 @@ class EquiposController{
         try {
             const equipo = await Equipo.findOne({
                 where: { serial: serial },
-                select: ['serial', 'marca', 'referencia', 'placaSena']
+                //select: ['serial', 'marca', 'referencia', 'placaSena', 'fechaCompra'],
+                relations: ['cuentaDante', 'mantenimientos']
             });
     
             if (!equipo) {
