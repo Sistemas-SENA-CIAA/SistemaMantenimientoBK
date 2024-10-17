@@ -208,7 +208,7 @@ class EquiposController{
                     if (item.imagenUrl && typeof item.imagenUrl === 'string') {
                         const filename = `${item.serial}-${Date.now()}.jpg`; //Creamos un nombre único para la imagen
                         imagenUrl = await this.downloadImage(item.imagenUrl, filename);
-                    }
+                    }   
     
                     //Nueva instancia de equipo
                     return new Equipo({
@@ -259,7 +259,7 @@ class EquiposController{
             const equipo = await Equipo.findOne({
                 where: { serial: serial },
                 //select: ['serial', 'marca', 'referencia', 'placaSena', 'fechaCompra'],
-                relations: ['cuentaDante', 'mantenimientos', 'mantenimientos.usuario', 'mantenimientos.chequeos.equipo.serial', 'subsede', 'dependencia', 'ambiente', 'tipoEquipo']
+                relations: ['cuentaDante', 'mantenimientos', 'mantenimientos.usuario', 'mantenimientos.chequeos.equipo', 'subsede', 'dependencia', 'ambiente', 'tipoEquipo']
             });
     
             if (!equipo) {
