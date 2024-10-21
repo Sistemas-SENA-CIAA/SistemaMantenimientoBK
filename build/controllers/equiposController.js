@@ -42,13 +42,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const axios_1 = __importDefault(require("axios"));
 const equipoModel_1 = require("../models/equipoModel");
 const cuentaDanteModel_1 = require("../models/cuentaDanteModel");
 const class_validator_1 = require("class-validator");
@@ -169,24 +163,6 @@ class EquiposController {
             }
         });
     }
-    downloadImage(url, filename) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const filePath = path_1.default.join(__dirname, '../../uploads', filename);
-            // Descargamos la imagen desde la URL
-            const response = yield (0, axios_1.default)({
-                url,
-                responseType: 'stream',
-            });
-            // Guardamos la imagen en la carpeta /uploads
-            yield new Promise((resolve, reject) => {
-                const writeStream = fs_1.default.createWriteStream(filePath);
-                response.data.pipe(writeStream);
-                writeStream.on('finish', resolve);
-                writeStream.on('error', reject);
-            });
-            return filePath; // Devolvemos la ruta de la imagen guardada
-        });
-    }
     importarEquipos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
@@ -210,11 +186,6 @@ class EquiposController {
                     else {
                         fechaCompra = new Date(item.fechaCompra);
                     }
-                    let imagenUrl = '';
-                    if (item.imagenUrl && typeof item.imagenUrl === 'string') {
-                        const filename = `${item.serial}-${Date.now()}.jpg`; //Creamos un nombre único para la imagen
-                        imagenUrl = yield this.downloadImage(item.imagenUrl, filename);
-                    }
                     return new equipoModel_1.Equipo({
                         serial: item.serial,
                         marca: item.marca,
@@ -227,7 +198,7 @@ class EquiposController {
                         subsede: item.subsede,
                         dependencia: item.dependencia,
                         ambiente: item.ambiente,
-                        imagenUrl,
+                        imagenUrl: item.imagenUrl,
                     });
                 })));
                 // Guardamos los equipos en la base de datos
@@ -261,15 +232,11 @@ class EquiposController {
                     chequeos: mantenimiento.chequeos.map(chequeo => ({
                         idChequeo: chequeo.idChequeo,
                         descripcion: chequeo.descripcion,
-                        equipoSerialChequeo: chequeo.equipo.serial //Obtienemos el serial del equipo relacionado con el chequeo
+                        equipoSerialChequeo: chequeo.equipo.serial //Obtenemos el serial del equipo relacionado con el chequeo
                     }))
                 }));
                 res.status(200).json({
-                    serial: equipo.serial,
-                    marca: equipo.marca,
-                    referencia: equipo.referencia,
-                    placaSena: equipo.placaSena,
-                    fechaCompra: equipo.fechaCompra,
+                    equipo,
                     mantenimientos: mantenimientos,
                 });
             }

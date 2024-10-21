@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-import axios from 'axios';
 import { Request, Response } from "express";
 import { Equipo } from "../models/equipoModel";
 import { CuentaDante } from "../models/cuentaDanteModel";
@@ -151,26 +148,6 @@ class EquiposController{
             }
         }
     }
-
-    async  downloadImage(url: string, filename: string): Promise<string> {
-        const filePath = path.join(__dirname, '../../uploads', filename);
-    
-        // Descargamos la imagen desde la URL
-        const response = await axios({
-            url,
-            responseType: 'stream',
-        });
-    
-        // Guardamos la imagen en la carpeta /uploads
-        await new Promise((resolve, reject) => {
-            const writeStream = fs.createWriteStream(filePath);
-            response.data.pipe(writeStream);
-            writeStream.on('finish', resolve);
-            writeStream.on('error', reject);
-        });
-    
-        return filePath; // Devolvemos la ruta de la imagen guardada
-    }
     
     async  importarEquipos(req: Request, res: Response) {
         try {
@@ -198,12 +175,6 @@ class EquiposController{
                         fechaCompra = new Date(item.fechaCompra);
                     }
             
-                    let imagenUrl = '';
-                    if (item.imagenUrl && typeof item.imagenUrl === 'string') {
-                        const filename = `${item.serial}-${Date.now()}.jpg`; //Creamos un nombre único para la imagen
-                        imagenUrl = await this.downloadImage(item.imagenUrl, filename); 
-                    }
-            
                     return new Equipo({
                         serial: item.serial,
                         marca: item.marca,
@@ -216,7 +187,7 @@ class EquiposController{
                         subsede: item.subsede,
                         dependencia: item.dependencia,
                         ambiente: item.ambiente,
-                        imagenUrl,
+                        imagenUrl: item.imagenUrl,
                     });
                 })
             );
@@ -231,7 +202,6 @@ class EquiposController{
             res.status(500).json({ error: 'Error al importar datos' });
         }
     }
-    
 
     async generarDatosCvEspecifico(req: Request, res: Response) {
         const { serial } = req.params;
@@ -256,16 +226,12 @@ class EquiposController{
                 chequeos: mantenimiento.chequeos.map(chequeo => ({
                     idChequeo: chequeo.idChequeo,
                     descripcion: chequeo.descripcion,
-                    equipoSerialChequeo: chequeo.equipo.serial //Obtienemos el serial del equipo relacionado con el chequeo
+                    equipoSerialChequeo: chequeo.equipo.serial //Obtenemos el serial del equipo relacionado con el chequeo
                 }))
             }));
     
             res.status(200).json({
-                serial: equipo.serial,
-                marca: equipo.marca,
-                referencia: equipo.referencia,
-                placaSena: equipo.placaSena,
-                fechaCompra: equipo.fechaCompra,
+                equipo,
                 mantenimientos: mantenimientos,
             });
         } catch (err) {
