@@ -169,7 +169,7 @@ class EquiposController {
             }
         });
     }
-    downloadImage(url, filename) {
+    descargarImagenUrl(url, filename) {
         return __awaiter(this, void 0, void 0, function* () {
             const filePath = path_1.default.join(__dirname, '../../uploads', filename);
             // Descargamos la imagen desde la URL
@@ -213,7 +213,7 @@ class EquiposController {
                     let imagenUrl = '';
                     if (item.imagenUrl && typeof item.imagenUrl === 'string') {
                         const filename = `${item.serial}-${Date.now()}.jpg`; //Creamos un nombre único para la imagen
-                        imagenUrl = yield this.downloadImage(item.imagenUrl, filename);
+                        imagenUrl = yield this.descargarImagenUrl(item.imagenUrl, filename);
                     }
                     return new equipoModel_1.Equipo({
                         serial: item.serial,

@@ -152,7 +152,7 @@ class EquiposController{
         }
     }
 
-    async  downloadImage(url: string, filename: string): Promise<string> {
+    async  descargarImagenUrl(url: string, filename: string): Promise<string> {
         const filePath = path.join(__dirname, '../../uploads', filename);
     
         // Descargamos la imagen desde la URL
@@ -200,8 +200,8 @@ class EquiposController{
             
                     let imagenUrl = '';
                     if (item.imagenUrl && typeof item.imagenUrl === 'string') {
-                        const filename = `${item.serial}-${Date.now()}.jpg`; //Creamos un nombre único para la imagen
-                        imagenUrl = await this.downloadImage(item.imagenUrl, filename); 
+                        const filename = `${item.serial}-${Date.now()}.jpg`; 
+                        imagenUrl = await this.descargarImagenUrl(item.imagenUrl, filename); 
                     }
             
                     return new Equipo({
@@ -231,7 +231,6 @@ class EquiposController{
             res.status(500).json({ error: 'Error al importar datos' });
         }
     }
-    
 
     async generarDatosCvEspecifico(req: Request, res: Response) {
         const { serial } = req.params;
